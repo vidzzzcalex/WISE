@@ -1,0 +1,45 @@
+{
+  "name": "wise",
+  "version": "1.2.0",
+  "private": true,
+  "description": "WISE — AI-Powered Workforce Intelligence Platform. Real-time org health, skill mapping, redundancy analysis, and AI-driven workforce recommendations.",
+  "author": "WISE Corp",
+  "license": "UNLICENSED",
+  "keywords": [
+    "workforce-intelligence",
+    "hr-analytics",
+    "ai-platform",
+    "skill-matrix",
+    "employee-digital-twin"
+  ],
+  "homepage": "https://wise.workforce",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wise-corp/wise-platform"
+  },
+  "scripts": {
+    "build": "npx @tailwindcss/cli -i src/styles.css -o dist/styles.css",
+    "build:watch": "npx @tailwindcss/cli -i src/styles.css -o dist/styles.css --watch",
+    "dev": "npm run build && npx serve . -l 5173 --single --no-clipboard",
+    "start": "npm run build && npx serve . -l 5173 --single",
+    "preview": "npm run build && npx serve . -l 5174 --single --no-clipboard"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.2",
+    "autoprefixer": "^10.5.2",
+    "postcss": "^8.5.16",
+    "tailwindcss": "^4.3.2"
+  }
+}

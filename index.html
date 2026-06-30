@@ -1,0 +1,2525 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full" data-theme="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>WISE — AI-Powered Workforce Intelligence</title>
+  
+  <!-- Inline script to prevent theme flash - apply before paint -->
+  <script>
+    (function() {
+      var saved = localStorage.getItem('wise-theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+      } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Google Fonts: Geist (for headings & labels) & Inter (for body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+  <!-- Tailwind Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // Hex specifications from user design system rules
+            primary: '#070235', // Deep Navy
+            secondary: '#00687a', // Teal/cyan
+            success: '#009d6c', // Success
+            error: '#ba1a1a', // Error
+            warning: '#f59e0b', // amber-500 equivalent for warning
+            'warning-light': '#fef3c7',
+            slate: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a'
+            }
+          },
+          borderRadius: {
+            'card': '14px',
+            'btn': '8px',
+          },
+          spacing: {
+            'stack-xs': '4px',
+            'stack-sm': '8px',
+            'stack-md': '16px',
+            'stack-lg': '24px',
+            'stack-xl': '48px',
+          },
+          fontFamily: {
+            geist: ['Geist', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS for Glassmorphism, Animations & Theme System -->
+  <style>
+    /* ========== LIGHT MODE TOKENS (default) ========== */
+    :root {
+      --bg-primary: #f8f9ff;
+      --bg-surface: #ffffff;
+      --bg-elevated: #ffffff;
+      --text-primary: #070235;
+      --text-secondary: #47464f;
+      --text-muted: #64748b;
+      --border-subtle: rgba(7,2,53,0.08);
+      --glass-bg: rgba(255,255,255,0.7);
+      --glass-border: rgba(229,238,255,0.5);
+      --header-bg: rgba(255,255,255,0.75);
+      --nav-bg: rgba(255,255,255,0.75);
+      --shadow: 0 4px 20px rgba(30, 27, 75, 0.03);
+      --scrollbar-track: rgba(229,238,255,0.3);
+      --scrollbar-thumb: rgba(0,104,122,0.3);
+      --avatar-bg-light: #f0f4ff;
+      --card-bg: rgba(255,255,255,0.4);
+      --chart-fill: #00687a;
+      --chart-opacity: 0.2;
+      --ring-track: rgba(229,238,255,0.6);
+      --ring-active: linear-gradient(135deg, #00687a, #009d6c);
+      --amber-pulse-bg: rgba(245,158,11,0.1);
+    }
+
+    /* ========== DARK MODE TOKENS ========== */
+    [data-theme="dark"] {
+      --bg-primary: #0D0F1A;
+      --bg-surface: #13162A;
+      --bg-elevated: #1C2040;
+      --text-primary: #ffffff;
+      --text-secondary: #A0A8C0;
+      --text-muted: #5A6382;
+      --border-subtle: rgba(255,255,255,0.06);
+      --glass-bg: rgba(19,22,42,0.8);
+      --glass-border: rgba(255,255,255,0.06);
+      --header-bg: rgba(19,22,42,0.85);
+      --nav-bg: rgba(19,22,42,0.85);
+      --shadow: 0 4px 24px rgba(0,0,0,0.4);
+      --scrollbar-track: rgba(90,99,130,0.2);
+      --scrollbar-thumb: rgba(0,201,177,0.3);
+      --avatar-bg-light: #1C2040;
+      --card-bg: rgba(28,32,64,0.4);
+      --chart-fill: #4B9EFF;
+      --chart-opacity: 0.15;
+      --ring-track: rgba(255,255,255,0.08);
+      --ring-active: linear-gradient(135deg, #7C5CFC, #4B9EFF);
+      --amber-pulse-bg: rgba(245,166,35,0.15);
+    }
+
+    /* ========== BASE STYLES ========== */
+    body {
+      background-color: var(--bg-primary);
+      font-family: 'Inter', sans-serif;
+      color: var(--text-primary);
+      transition: background-color 300ms ease, color 300ms ease;
+    }
+    
+    .font-geist-heading {
+      font-family: 'Geist', sans-serif;
+    }
+
+    /* Smooth transitions for themed elements */
+    .glass-card, .glass-header, .glass-nav, header, nav, aside, 
+    .bg-white\/70, [class*="bg-white"], [class*="bg-slate-100"],
+    [class*="border-slate-"], [class*="text-slate-"] {
+      transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+    }
+
+    /* ========== GLASSMORPHISM ========== */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow);
+      transition: background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease, transform 150ms ease;
+    }
+    
+    .glass-header {
+      background: var(--header-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+      transition: background-color 300ms ease, border-color 300ms ease;
+    }
+
+    .glass-nav {
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--glass-border);
+      transition: background-color 300ms ease, border-color 300ms ease;
+    }
+
+    /* ========== CUSTOM MATERIAL ICON UTILITIES ========== */
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .material-fill {
+      font-variation-settings: 'FILL' 1;
+    }
+
+    /* ========== SCREEN TRANSITIONS ========== */
+    .screen-section {
+      transition: opacity 200ms ease, transform 200ms ease;
+    }
+
+    /* ========== CUSTOM SCROLLBARS ========== */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0,104,122,0.5);
+    }
+
+    /* ========== AMBER PULSE ANIMATION ========== */
+    @keyframes borderPulse {
+      0%, 100% { 
+        border-color: rgba(245, 158, 11, 0.4); 
+        box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.1);
+      }
+      50% { 
+        border-color: rgba(245, 158, 11, 1); 
+        box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.25);
+      }
+    }
+    .pulse-amber-border {
+      animation: borderPulse 2s infinite ease-in-out;
+      border-width: 1px;
+      border-style: solid;
+    }
+
+    /* ========== ALERT CARD STAGGERED FADE-IN ========== */
+    @keyframes alertFadeIn {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .alert-card {
+      animation: alertFadeIn 400ms ease-out forwards;
+      opacity: 0;
+    }
+    .alert-card:nth-child(1) { animation-delay: 0ms; }
+    .alert-card:nth-child(2) { animation-delay: 100ms; }
+    .alert-card:nth-child(3) { animation-delay: 200ms; }
+    .alert-card:nth-child(4) { animation-delay: 300ms; }
+
+    /* ========== LOGIN CARD ANIMATION ========== */
+    @keyframes loginSlideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .login-card-animate {
+      animation: loginSlideUp 500ms ease-out forwards;
+    }
+
+    /* ========== INPUT FOCUS GLOW ========== */
+    .wise-input {
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+    .wise-input:focus {
+      border-color: #00687a !important;
+      box-shadow: 0 0 0 3px rgba(0,104,122,0.15) !important;
+    }
+
+    /* ========== TAB SCALE-TAP EFFECT ========== */
+    @keyframes tapBounce {
+      0% { transform: scale(0.9); }
+      60% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .tap-bounce {
+      animation: tapBounce 300ms ease-out;
+    }
+
+    /* ========== PROGRESS BAR ANIMATIONS ========== */
+    .wise-progress {
+      transition: width 600ms ease-out;
+    }
+
+    /* ========== DARK MODE CARD OVERRIDES ========== */
+    [data-theme="dark"] .pulse-amber-border {
+      background: rgba(245,166,35,0.08);
+    }
+    [data-theme="dark"] [class*="bg-slate-100"] {
+      background-color: rgba(90,99,130,0.2) !important;
+    }
+    [data-theme="dark"] [class*="text-slate-500"],
+    [data-theme="dark"] [class*="text-slate-600"] {
+      color: var(--text-secondary) !important;
+    }
+    [data-theme="dark"] [class*="border-slate-200"],
+    [data-theme="dark"] [class*="border-slate-100"] {
+      border-color: var(--border-subtle) !important;
+    }
+    [data-theme="dark"] [class*="bg-teal-50"] {
+      background-color: rgba(0,201,177,0.1) !important;
+    }
+    [data-theme="dark"] [class*="bg-amber-50"] {
+      background-color: rgba(245,166,35,0.1) !important;
+    }
+    [data-theme="dark"] [class*="bg-red-50"] {
+      background-color: rgba(255,77,106,0.1) !important;
+    }
+    [data-theme="dark"] [class*="bg-indigo-100"] {
+      background-color: rgba(124,92,252,0.15) !important;
+    }
+    [data-theme="dark"] [class*="bg-emerald-100"] {
+      background-color: rgba(0,201,177,0.15) !important;
+    }
+    [data-theme="dark"] [class*="bg-blue-100"] {
+      background-color: rgba(75,158,255,0.15) !important;
+    }
+    [data-theme="dark"] [class*="bg-white\/40"],
+    [data-theme="dark"] [class*="bg-white/40"] {
+      background-color: rgba(28,32,64,0.4) !important;
+    }
+    [data-theme="dark"] [class*="text-indigo-700"] {
+      color: #7C5CFC !important;
+    }
+    [data-theme="dark"] [class*="text-amber-600"],
+    [data-theme="dark"] [class*="text-amber-700"],
+    [data-theme="dark"] [class*="text-amber-800"] {
+      color: #F5A623 !important;
+    }
+    [data-theme="dark"] .sidebar-item:hover {
+      background-color: rgba(124,92,252,0.08) !important;
+    }
+
+    /* ========== RESPECT REDUCED MOTION ========== */
+    @media (prefers-reduced-motion: reduce) {
+      .screen-section {
+        transition: none !important;
+        transform: none !important;
+      }
+      .pulse-amber-border {
+        animation: none !important;
+        border-color: rgba(245, 158, 11, 0.8) !important;
+      }
+      #health-ring {
+        transition: none !important;
+      }
+      .alert-card {
+        animation: none !important;
+        opacity: 1;
+      }
+      .login-card-animate {
+        animation: none !important;
+      }
+    }
+
+    /* ========== TIMELINE DOTTED PATH ========== */
+    .timeline-line {
+      background-image: linear-gradient(to bottom, #00687a 30%, rgba(255,255,255,0) 0%);
+      background-position: left;
+      background-size: 2px 8px;
+      background-repeat: repeat-y;
+    }
+    [data-theme="dark"] .timeline-line {
+      background-image: linear-gradient(to bottom, #00C9B1 30%, rgba(255,255,255,0) 0%);
+    }
+
+    /* ========== HEATMAP TOOLTIP ========== */
+    .heatmap-tooltip {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      pointer-events: none;
+      position: fixed;
+      z-index: 50;
+      box-shadow: var(--shadow);
+      transition: opacity 150ms ease;
+    }
+
+    /* ========== CHART TOOLTIP ========== */
+    .chart-tooltip {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-family: 'Geist', sans-serif;
+      font-size: 11px;
+      pointer-events: none;
+      position: absolute;
+      z-index: 50;
+      white-space: nowrap;
+    }
+
+    /* ========== SWIPE DISMISS ========== */
+    .alert-dismissing {
+      transform: translateX(100%);
+      opacity: 0;
+      transition: transform 200ms ease, opacity 200ms ease;
+    }
+
+    /* ========== SPINNER ANIMATION ========== */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .wise-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    /* ========== HIDE SCROLLBAR FOR TABS ========== */
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col overflow-hidden select-none bg-[var(--bg-primary)]">
+
+  <!-- ============================================ -->
+  <!-- LOGIN / ONBOARDING SCREEN (shown first)     -->
+  <!-- ============================================ -->
+  <section id="screen-login" class="fixed inset-0 z-50 flex items-center justify-center overflow-hidden" style="background: var(--bg-primary);">
+    <!-- Background blobs -->
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] rounded-full opacity-[0.08] pointer-events-none" style="background: radial-gradient(circle, #00687a 0%, transparent 70%); transform: translate(30%, -30%);"></div>
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full opacity-[0.06] pointer-events-none" style="background: radial-gradient(circle, #070235 0%, transparent 70%); transform: translate(-20%, 20%);"></div>
+    <!-- Grid pattern overlay -->
+    <div class="absolute inset-0 pointer-events-none opacity-[0.03]" style="background-image: linear-gradient(rgba(7,2,53,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(7,2,53,0.1) 1px, transparent 1px); background-size: 40px 40px;"></div>
+    
+    <!-- Login Card Container -->
+    <div class="relative w-full max-w-[440px] px-6 login-card-animate">
+      
+      <!-- Logo Block -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center gap-1.5">
+          <div class="w-10 h-10 rounded-[10px] bg-gradient-to-br from-[#070235] to-[#00687a] flex items-center justify-center text-white shadow-sm">
+            <span class="material-symbols-outlined text-2xl material-fill">bubble_chart</span>
+          </div>
+        </div>
+        <h1 class="font-geist font-black text-[32px] tracking-tight text-[#070235] mt-2" style="letter-spacing: -0.04em;">WISE</h1>
+        <p class="text-sm text-slate-500 font-inter mt-1">Workforce Intelligence, Simplified.</p>
+      </div>
+
+      <!-- Glass Login Card -->
+      <div class="rounded-[20px] p-10" style="background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: 0 8px 32px rgba(7,2,53,0.06);">
+        
+        <h2 class="font-geist font-bold text-2xl text-[#070235]">Welcome back</h2>
+        <p class="text-sm text-slate-500 mt-1 mb-6">Sign in to your WISE workspace</p>
+
+        <form id="login-form" onsubmit="handleLogin(event)" class="space-y-5">
+          
+          <!-- Email Field -->
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-bold font-geist text-slate-500 uppercase tracking-wider">Work email</label>
+            <input type="email" required placeholder="you@company.com" 
+                   class="wise-input w-full h-11 px-4 border border-slate-200 rounded-[8px] text-sm font-inter text-[#070235] bg-transparent focus:outline-none transition-all">
+          </div>
+
+          <!-- Password Field -->
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-bold font-geist text-slate-500 uppercase tracking-wider">Password</label>
+            <div class="relative">
+              <input type="password" id="login-password" required placeholder="••••••••" 
+                     class="wise-input w-full h-11 px-4 pr-10 border border-slate-200 rounded-[8px] text-sm font-inter text-[#070235] bg-transparent focus:outline-none transition-all">
+              <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+                <span class="material-symbols-outlined text-lg" id="password-vis-icon">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Remember me + Forgot password -->
+          <div class="flex items-center justify-between">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked class="w-4 h-4 rounded border-slate-300 text-[#00687a] focus:ring-[#00687a] focus:ring-offset-0">
+              <span class="text-xs text-slate-500 font-medium">Remember me</span>
+            </label>
+            <a href="#" class="text-xs font-semibold text-[#00687a] hover:underline">Forgot password?</a>
+          </div>
+
+          <!-- Sign In Button -->
+          <button type="submit" id="login-submit-btn" 
+                  class="w-full h-11 bg-[#070235] hover:bg-[#070235]/90 text-white text-sm font-semibold font-geist rounded-[8px] transition-all active:scale-[0.97] flex items-center justify-center gap-2">
+            <span id="login-btn-text">Sign in</span>
+            <span id="login-btn-spinner" class="hidden wise-spinner"></span>
+          </button>
+
+          <!-- Divider -->
+          <div class="flex items-center gap-3">
+            <hr class="flex-1 border-t border-slate-200">
+            <span class="text-xs text-slate-400 font-medium">or continue with</span>
+            <hr class="flex-1 border-t border-slate-200">
+          </div>
+
+          <!-- SSO Button -->
+          <button type="button" onclick="handleLogin(event)" 
+                  class="w-full h-11 flex items-center justify-center gap-3 border border-slate-200 bg-white rounded-[8px] text-sm font-geist font-medium text-slate-700 hover:bg-slate-50 transition-all active:scale-[0.97]">
+            <svg class="w-5 h-5" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Sign in with Google Workspace
+          </button>
+        </form>
+      </div>
+
+      <!-- Footer below card -->
+      <div class="text-center mt-8 space-y-3">
+        <p class="text-xs text-slate-500">
+          Don't have an account?
+          <a href="#" class="text-[#00687a] font-semibold hover:underline">Request access <span class="material-symbols-outlined text-xs align-middle">arrow_forward</span></a>
+        </p>
+        <a href="#" class="text-xs font-semibold text-[#00687a] hover:underline flex items-center justify-center gap-1">
+          Enterprise SSO / SAML <span class="material-symbols-outlined text-xs">open_in_new</span>
+        </a>
+        <p class="text-[10px] text-slate-400 flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-xs">lock</span>
+          Protected by WISE Security. SOC 2 Type II Certified.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TOP HEADER (Frosted Glass, 64px tall) -->
+  <header class="fixed top-0 left-0 right-0 h-16 z-30 glass-header flex items-center justify-between px-4 md:px-6">
+    <!-- Left Logo Section -->
+    <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('dashboard')">
+      <div class="w-10 h-10 rounded-[8px] bg-gradient-to-br from-[#070235] to-[#00687a] flex items-center justify-center text-white shadow-sm">
+        <span class="material-symbols-outlined text-2xl material-fill">bubble_chart</span>
+      </div>
+      <span class="font-geist font-extrabold text-[22px] tracking-tight text-[#070235]">WISE<span class="font-light text-[#00687a]"> Platform</span></span>
+    </div>
+    
+    <!-- Right Actions: Theme Toggle + Search + Profile Avatar -->
+    <div class="flex items-center gap-2 md:gap-4">
+      <!-- Dark Mode Toggle -->
+      <button id="theme-toggle" onclick="toggleTheme()" class="w-9 h-9 rounded-full border border-slate-200 bg-white/50 flex items-center justify-center text-slate-500 hover:text-[#00687a] hover:border-[#00687a]/30 transition-all duration-200" title="Toggle theme">
+        <span id="theme-toggle-icon" class="material-symbols-outlined text-xl">light_mode</span>
+      </button>
+      <div class="relative hidden sm:block">
+        <input id="header-search" name="header-search" type="text" placeholder="Search insights or employees..." class="w-48 lg:w-64 pl-9 pr-4 py-1.5 bg-white/50 border border-slate-200 text-sm focus:ring-1 focus:ring-[#00687a] focus:border-[#00687a] rounded-[8px] transition-all">
+        <span class="material-symbols-outlined absolute left-2.5 top-2 text-slate-400 text-lg">search</span>
+      </div>
+      <button class="sm:hidden p-2 hover:bg-slate-100/50 rounded-full transition-colors">
+        <span class="material-symbols-outlined text-slate-700">search</span>
+      </button>
+      <div class="flex items-center gap-2 cursor-pointer group" onclick="switchTab('profile')">
+        <div class="relative w-9 h-9 rounded-full overflow-hidden border border-slate-200 transition-transform group-hover:scale-105">
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120&h=120" alt="Alex Sterling Profile Photo" class="w-full h-full object-cover">
+        </div>
+        <div class="hidden md:flex flex-col text-left">
+          <span class="text-xs font-semibold text-[#070235]">Alex Sterling</span>
+          <span class="text-[9px] text-slate-500 uppercase tracking-widest font-geist font-semibold">CPO • Admin</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT SHELL CONTAINER (Desktop Sidebar + Main Screen Canvas) -->
+  <div class="flex-1 flex pt-16 pb-20 md:pb-0 h-full overflow-hidden">
+    
+    <!-- DESKTOP FIXED LEFT SIDEBAR (≥ 768px, Collapsed to 64px, expands to 240px) -->
+    <aside class="hidden md:flex flex-col h-full bg-white/70 backdrop-blur-[12px] border-r border-[rgba(229,238,255,0.5)] z-20 group w-16 hover:w-60 transition-all duration-300 ease-in-out select-none">
+      <div class="flex-1 flex flex-col justify-between py-6">
+        <!-- Navigation Rows -->
+        <nav class="space-y-2 px-3">
+          <!-- Dashboard Tab -->
+          <button onclick="switchTab('dashboard')" id="sidebar-dashboard" class="sidebar-item w-full flex items-center py-3 px-3 rounded-[8px] text-slate-500 hover:text-[#00687a] hover:bg-slate-50/50 relative overflow-hidden transition-all duration-200">
+            <!-- Active accent bar -->
+            <div class="active-indicator absolute left-0 top-0 bottom-0 w-1 bg-[#00687a] rounded-r opacity-0 transition-opacity"></div>
+            <span class="material-symbols-outlined text-2xl min-w-[24px]">dashboard</span>
+            <span class="sidebar-label font-geist text-sm font-semibold ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 whitespace-nowrap">Dashboard</span>
+          </button>
+
+          <!-- Employees Tab -->
+          <button onclick="switchTab('employees')" id="sidebar-employees" class="sidebar-item w-full flex items-center py-3 px-3 rounded-[8px] text-slate-500 hover:text-[#00687a] hover:bg-slate-50/50 relative overflow-hidden transition-all duration-200">
+            <div class="active-indicator absolute left-0 top-0 bottom-0 w-1 bg-[#00687a] rounded-r opacity-0 transition-opacity"></div>
+            <span class="material-symbols-outlined text-2xl min-w-[24px]">groups</span>
+            <span class="sidebar-label font-geist text-sm font-semibold ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 whitespace-nowrap">Employees</span>
+          </button>
+
+          <!-- AI Assistant Tab -->
+          <button onclick="switchTab('ai')" id="sidebar-ai" class="sidebar-item w-full flex items-center py-3 px-3 rounded-[8px] text-slate-500 hover:text-[#00687a] hover:bg-slate-50/50 relative overflow-hidden transition-all duration-200">
+            <div class="active-indicator absolute left-0 top-0 bottom-0 w-1 bg-[#00687a] rounded-r opacity-0 transition-opacity"></div>
+            <span class="material-symbols-outlined text-2xl min-w-[24px]">smart_toy</span>
+            <span class="sidebar-label font-geist text-sm font-semibold ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 whitespace-nowrap">AI Assistant</span>
+          </button>
+
+          <!-- Skill Matrix Tab -->
+          <button onclick="switchTab('skills')" id="sidebar-skills" class="sidebar-item w-full flex items-center py-3 px-3 rounded-[8px] text-slate-500 hover:text-[#00687a] hover:bg-slate-50/50 relative overflow-hidden transition-all duration-200">
+            <div class="active-indicator absolute left-0 top-0 bottom-0 w-1 bg-[#00687a] rounded-r opacity-0 transition-opacity"></div>
+            <span class="material-symbols-outlined text-2xl min-w-[24px]">hub</span>
+            <span class="sidebar-label font-geist text-sm font-semibold ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 whitespace-nowrap">Skill Matrix</span>
+          </button>
+
+          <!-- Alerts Tab -->
+          <button onclick="switchTab('alerts')" id="sidebar-alerts" class="sidebar-item w-full flex items-center py-3 px-3 rounded-[8px] text-slate-500 hover:text-[#00687a] hover:bg-slate-50/50 relative overflow-hidden transition-all duration-200">
+            <div class="active-indicator absolute left-0 top-0 bottom-0 w-1 bg-[#00687a] rounded-r opacity-0 transition-opacity"></div>
+            <span class="relative">
+              <span class="material-symbols-outlined text-2xl min-w-[24px]">notifications</span>
+              <span id="alert-badge-sidebar" class="absolute -top-1 -right-1 w-4 h-4 bg-[#ba1a1a] text-white text-[8px] font-geist font-bold rounded-full flex items-center justify-center hidden">3</span>
+            </span>
+            <span class="sidebar-label font-geist text-sm font-semibold ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 whitespace-nowrap">Alerts</span>
+          </button>
+
+          <!-- Profile Tab -->
+          <button onclick="switchTab('profile')" id="sidebar-profile" class="sidebar-item w-full flex items-center py-3 px-3 rounded-[8px] text-slate-500 hover:text-[#00687a] hover:bg-slate-50/50 relative overflow-hidden transition-all duration-200">
+            <div class="active-indicator absolute left-0 top-0 bottom-0 w-1 bg-[#00687a] rounded-r opacity-0 transition-opacity"></div>
+            <span class="material-symbols-outlined text-2xl min-w-[24px]">account_circle</span>
+            <span class="sidebar-label font-geist text-sm font-semibold ml-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 whitespace-nowrap">Profile</span>
+          </button>
+        </nav>
+
+        <!-- System Version Indicator at bottom -->
+        <div class="px-5 border-t border-slate-100 pt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 overflow-hidden whitespace-nowrap">
+          <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider font-geist">WISE Platform v1.2</p>
+          <p class="text-[9px] text-slate-400">© 2026 WISE Corp</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN SCREEN CANVAS -->
+    <main class="flex-1 relative h-full overflow-hidden">
+
+      <!-- ============================================ -->
+      <!-- 1. DASHBOARD SCREEN                         -->
+      <!-- ============================================ -->
+      <section id="screen-dashboard" class="screen-section absolute inset-0 w-full h-full overflow-y-auto px-4 md:px-8 py-6 space-y-6">
+        
+        <!-- SECTION 1: ORG HEALTH SCORE HERO -->
+        <div class="glass-card rounded-[14px] p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
+          <!-- Centered Circular Ring SVG (160px) -->
+          <div class="relative w-40 h-40 flex items-center justify-center flex-shrink-0">
+            <svg class="w-full h-full transform -rotate-90">
+              <!-- Background ring -->
+              <circle cx="80" cy="80" r="70" stroke="rgba(229, 238, 255, 0.6)" stroke-width="10" fill="transparent" />
+              <!-- Foreground ring with 800ms load transition -->
+              <circle id="health-ring" cx="80" cy="80" r="70" 
+                      stroke="url(#health-grad)" stroke-width="12" 
+                      fill="transparent"
+                      stroke-dasharray="439.8"
+                      stroke-dashoffset="439.8"
+                      stroke-linecap="round"
+                      class="transition-all duration-[800ms] ease-out" />
+              <defs>
+                <linearGradient id="health-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#00687a" />
+                  <stop offset="100%" stop-color="#009d6c" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="absolute flex flex-col items-center justify-center">
+              <span class="font-geist font-extrabold text-[32px] text-[#070235] leading-none">92%</span>
+              <span class="font-geist font-bold text-[11px] text-slate-500 tracking-widest mt-1 uppercase">HEALTH</span>
+            </div>
+          </div>
+
+          <!-- Description Hero Copy -->
+          <div class="text-center md:text-left space-y-2 flex-1">
+            <h1 class="font-geist font-bold text-2xl text-[#070235]">Organization Health Score</h1>
+            <div class="flex items-center justify-center md:justify-start gap-1 text-[#00687a] font-semibold text-sm">
+              <span class="material-symbols-outlined text-base">trending_up</span>
+              <span>Predicted 5% growth</span>
+            </div>
+            <p class="font-inter text-slate-600 text-sm leading-relaxed max-w-2xl">
+              Your enterprise ecosystem is operating at peak efficiency. Sentiment analytics predict continued stability with high retention markers across key divisions over the upcoming quarter.
+            </p>
+          </div>
+        </div>
+
+        <!-- SECTION 2: KPI STAT CARDS (Responsive Grid) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Card 1: Employees Present -->
+          <div class="glass-card rounded-[14px] p-5 flex flex-col justify-between hover:translate-y-[-2px] transition-all duration-200">
+            <div class="flex justify-between items-start">
+              <div class="w-10 h-10 rounded-[8px] bg-slate-100 flex items-center justify-center text-slate-700">
+                <span class="material-symbols-outlined">groups</span>
+              </div>
+              <span class="text-xs font-semibold text-[#00687a] bg-teal-50 px-2.5 py-0.5 rounded-full">+12 vs yesterday</span>
+            </div>
+            <div class="mt-4 space-y-1">
+              <span class="text-xs text-slate-500 font-medium">Employees Present</span>
+              <div class="text-2xl font-bold font-geist text-[#070235]">1,240</div>
+            </div>
+          </div>
+
+          <!-- Card 2: Burnout Risk (pulsing border animation) -->
+          <div class="glass-card rounded-[14px] p-5 flex flex-col justify-between hover:translate-y-[-2px] transition-all duration-200 pulse-amber-border">
+            <div class="flex justify-between items-start">
+              <div class="w-10 h-10 rounded-[8px] bg-amber-50 flex items-center justify-center text-amber-500">
+                <span class="material-symbols-outlined material-fill">warning</span>
+              </div>
+              <span class="text-xs font-semibold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full">Amber Alert</span>
+            </div>
+            <div class="mt-4 space-y-1">
+              <span class="text-xs text-slate-500 font-medium">Burnout Risk</span>
+              <div class="text-2xl font-bold font-geist text-[#070235]">4 Critical</div>
+            </div>
+          </div>
+
+          <!-- Card 3: Skill Gap -->
+          <div class="glass-card rounded-[14px] p-5 flex flex-col justify-between border-l-4 border-[#ba1a1a] hover:translate-y-[-2px] transition-all duration-200">
+            <div class="flex justify-between items-start">
+              <div class="w-10 h-10 rounded-[8px] bg-red-50 flex items-center justify-center text-[#ba1a1a]">
+                <span class="material-symbols-outlined">school</span>
+              </div>
+              <span class="text-xs font-semibold text-[#ba1a1a] bg-red-50 px-2.5 py-0.5 rounded-full">Action Required</span>
+            </div>
+            <div class="mt-4 space-y-1">
+              <span class="text-xs text-slate-500 font-medium">Skill Gap</span>
+              <div class="text-2xl font-bold font-geist text-[#070235] flex items-baseline gap-1">
+                8% <span class="text-xs text-slate-500 font-normal font-inter">in Cloud Eng</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Project Deadlines -->
+          <div class="glass-card rounded-[14px] p-5 flex flex-col justify-between border border-slate-200 hover:translate-y-[-2px] transition-all duration-200">
+            <div class="flex justify-between items-start">
+              <div class="w-10 h-10 rounded-[8px] bg-slate-100 flex items-center justify-center text-slate-700">
+                <span class="material-symbols-outlined">calendar_clock</span>
+              </div>
+              <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">Q4 Roadmap</span>
+            </div>
+            <div class="mt-4 space-y-1">
+              <span class="text-xs text-slate-500 font-medium">Project Deadlines</span>
+              <div class="text-2xl font-bold font-geist text-[#070235]">2 At Risk</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: RECOMMENDATIONS FEED & BEZIER AREA CHART -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Left: AI Recommendations Feed -->
+          <div class="glass-card rounded-[14px] p-6 flex flex-col justify-between">
+            <div class="space-y-4">
+              <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                <span class="material-symbols-outlined text-[#00687a] material-fill">smart_toy</span>
+                <h2 class="font-geist font-bold text-lg text-[#070235]">AI Recommendations Feed</h2>
+              </div>
+              
+              <!-- Recommendations List -->
+              <div class="space-y-4">
+                <!-- Card 1 -->
+                <div class="p-4 bg-white/40 border border-slate-100 rounded-[10px] space-y-2 hover:border-slate-200 transition-colors">
+                  <p class="text-xs text-[#070235] font-medium leading-relaxed">
+                    <strong class="text-[#00687a]">Rahul Varma</strong> is the best replacement for Ajay Sharma's leave tomorrow.
+                  </p>
+                  <span class="inline-flex text-[10px] font-bold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">95% Skill Match</span>
+                </div>
+                
+                <!-- Card 2 (Teal Border Accent) -->
+                <div class="p-4 bg-white/40 border-l-[3px] border-[#00687a] border border-slate-100 rounded-r-[10px] space-y-2 hover:border-slate-200 transition-colors">
+                  <p class="text-xs text-[#070235] font-medium leading-relaxed">
+                    Cloud Engineering certification recommended for 12 core engineers to eliminate redundancy deficit.
+                  </p>
+                  <span class="inline-flex text-[10px] font-bold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">Strategic Priority</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- View All insights button -->
+            <button class="mt-6 w-full py-2.5 rounded-[8px] bg-slate-100/50 hover:bg-slate-100 border border-slate-200/50 text-[#00687a] font-geist font-semibold text-xs transition-colors">
+              View All Insights (14)
+            </button>
+          </div>
+
+          <!-- Right: Workforce Productivity Index Area Chart -->
+          <div class="lg:col-span-2 glass-card rounded-[14px] p-6 flex flex-col justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+              <div>
+                <h2 class="font-geist font-bold text-lg text-[#070235]">Workforce Productivity Index</h2>
+                <p class="text-xs text-slate-500">Real-time aggregate output across departments</p>
+              </div>
+              
+              <!-- Stats summary row -->
+              <div class="flex gap-4">
+                <div class="text-center sm:text-right">
+                  <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider block">Average</span>
+                  <span class="font-geist font-bold text-[#070235] text-base">88.4</span>
+                </div>
+                <div class="border-l border-slate-200 h-8 self-center"></div>
+                <div class="text-center sm:text-right">
+                  <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider block">Peak</span>
+                  <span class="font-geist font-bold text-[#070235] text-base">94.1</span>
+                </div>
+                <div class="border-l border-slate-200 h-8 self-center"></div>
+                <div class="text-center sm:text-right">
+                  <span class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider block">Variance</span>
+                  <span class="font-geist font-bold text-[#ba1a1a] text-base">-2.1%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SVG Bezier Area Chart -->
+            <div class="w-full h-48 bg-white/40 border border-slate-100 rounded-[10px] p-2 relative overflow-hidden flex flex-col justify-between">
+              <!-- Grid Background Lines -->
+              <div class="absolute inset-0 flex flex-col justify-between py-6 px-1 opacity-20 pointer-events-none">
+                <hr class="border-slate-300 w-full">
+                <hr class="border-slate-300 w-full">
+                <hr class="border-slate-300 w-full">
+                <hr class="border-slate-300 w-full">
+              </div>
+
+              <!-- Main SVG Area Curve -->
+              <svg viewBox="0 0 700 150" class="w-full h-[85%] overflow-visible z-10">
+                <defs>
+                  <!-- Gradient fill with 15% opacity -->
+                  <linearGradient id="chart-glow" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#00687a" stop-opacity="0.2"/>
+                    <stop offset="100%" stop-color="#00687a" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                
+                <!-- Shaded Area -->
+                <path d="M 0 120 C 100 110, 150 140, 200 100 C 250 60, 320 80, 400 40 C 480 0, 550 50, 600 30 C 650 10, 700 40, 700 40 L 700 150 L 0 150 Z" 
+                      fill="url(#chart-glow)"/>
+                
+                <!-- Bezier Curve Outline -->
+                <path d="M 0 120 C 100 110, 150 140, 200 100 C 250 60, 320 80, 400 40 C 480 0, 550 50, 600 30 C 650 10, 700 40, 700 40" 
+                      fill="none" stroke="#00687a" stroke-width="3" stroke-linecap="round"/>
+                
+                <!-- Interactive dots -->
+                <circle cx="400" cy="40" r="5" fill="#00687a" stroke="#ffffff" stroke-width="2" class="cursor-pointer hover:r-7 transition-all"/>
+                <circle cx="600" cy="30" r="5" fill="#00687a" stroke="#ffffff" stroke-width="2" class="cursor-pointer hover:r-7 transition-all"/>
+              </svg>
+
+              <!-- X-Axis Labels -->
+              <div class="flex justify-between px-2 text-[10px] text-slate-500 font-semibold font-geist z-10 border-t border-slate-100 pt-1 bg-white/80">
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+                <span>Sun</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============================================ -->
+      <!-- 2. TEAM INTELLIGENCE (EMPLOYEES) SCREEN     -->
+      <!-- ============================================ -->
+      <section id="screen-employees" class="screen-section absolute inset-0 w-full h-full overflow-y-auto px-4 md:px-8 py-6 space-y-6 hidden">
+        
+        <!-- HEADER -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div>
+            <h1 class="font-geist font-bold text-2xl text-[#070235] flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#00687a]">groups</span>
+              Team Intelligence
+            </h1>
+            <p class="text-xs text-slate-500">1,240 employees across 12 departments</p>
+          </div>
+          <button class="w-10 h-10 rounded-[8px] border border-slate-200 bg-white/50 flex items-center justify-center text-slate-500 hover:text-[#00687a] hover:border-[#00687a]/30 transition-all flex-shrink-0">
+            <span class="material-symbols-outlined text-xl">tune</span>
+          </button>
+        </div>
+
+        <!-- SEARCH + FILTER BAR -->
+        <div class="space-y-3">
+          <div class="relative">
+            <input type="text" id="employee-search" oninput="filterEmployees()" placeholder="Search by name, role, or skill..." class="w-full pl-10 pr-10 py-2.5 bg-white/70 border border-slate-200 text-sm focus:ring-1 focus:ring-[#00687a] focus:border-[#00687a] rounded-[8px] transition-all">
+            <span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-sm">search</span>
+            <button onclick="document.getElementById('employee-search').value='';filterEmployees();" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 transition-colors">
+              <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="filterDept('All')" class="dept-btn px-3.5 py-1.5 rounded-full text-xs font-semibold font-geist border border-slate-200 bg-[#070235] text-white transition-all">All Depts ▾</button>
+            <button class="dept-btn px-3.5 py-1.5 rounded-full text-xs font-semibold font-geist border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 transition-all">Availability: Active ▾</button>
+            <button class="dept-btn px-3.5 py-1.5 rounded-full text-xs font-semibold font-geist border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 transition-all">Skill: Python ▾</button>
+          </div>
+        </div>
+
+        <!-- QUICK STAT ROW -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="glass-card rounded-[14px] p-4 text-center">
+            <span class="text-xs text-slate-500 font-medium">Active Now</span>
+            <div class="text-xl font-bold font-geist text-[#070235] mt-1">1,198</div>
+          </div>
+          <div class="glass-card rounded-[14px] p-4 text-center">
+            <span class="text-xs text-slate-500 font-medium">On Leave</span>
+            <div class="text-xl font-bold font-geist text-amber-600 mt-1">24</div>
+          </div>
+          <div class="glass-card rounded-[14px] p-4 text-center">
+            <span class="text-xs text-slate-500 font-medium">At Risk</span>
+            <div class="text-xl font-bold font-geist text-[#ba1a1a] mt-1">18</div>
+          </div>
+        </div>
+
+        <!-- EMPLOYEE CARDS LIST -->
+        <div id="employees-grid" class="space-y-3">
+          
+          <!-- 1. Alex Sterling -->
+          <div class="employee-card glass-card rounded-[14px] p-4 flex items-center gap-4 hover:translate-y-[-2px] transition-all duration-200 active:scale-[0.98] cursor-pointer" data-dept="HR" data-name="alex sterling" data-skills="leadership okrs data" data-role="Chief People Officer">
+            <div class="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border-2 border-[#00687a]">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120&h=120" alt="Alex Sterling" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5">
+                <h3 class="font-geist font-bold text-sm text-[#070235] truncate">Alex Sterling</h3>
+                <span class="material-symbols-outlined text-[#00687a] text-sm material-fill flex-shrink-0">verified</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Chief People Officer • Strategy</p>
+              <div class="flex flex-wrap gap-1.5 mt-1.5">
+                <span class="text-[9px] font-semibold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">Leadership</span>
+                <span class="text-[9px] font-semibold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">OKRs</span>
+                <span class="text-[9px] font-semibold font-geist text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Data</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#009d6c]"></span>
+              <span class="text-xs font-bold font-geist text-[#009d6c]">94%</span>
+              <span class="material-symbols-outlined text-slate-300 text-lg">chevron_right</span>
+            </div>
+          </div>
+
+          <!-- 2. Arjun Mehta -->
+          <div class="employee-card glass-card rounded-[14px] p-4 flex items-center gap-4 hover:translate-y-[-2px] transition-all duration-200 active:scale-[0.98] cursor-pointer" data-dept="Engineering" data-name="arjun mehta" data-skills="python aws k8s kubernetes" data-role="Sr. Engineer">
+            <div class="w-12 h-12 rounded-full bg-red-100 text-[#ba1a1a] font-geist font-bold flex items-center justify-center text-base flex-shrink-0 border-2 border-red-200">
+              AM
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5">
+                <h3 class="font-geist font-bold text-sm text-[#070235] truncate">Arjun Mehta</h3>
+              </div>
+              <p class="text-[11px] text-slate-500">Sr. Engineer • Engineering</p>
+              <div class="flex flex-wrap gap-1.5 mt-1.5">
+                <span class="text-[9px] font-semibold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">Python</span>
+                <span class="text-[9px] font-semibold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">AWS</span>
+                <span class="text-[9px] font-semibold font-geist text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">K8s</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#ba1a1a]"></span>
+              <span class="text-xs font-bold font-geist text-[#ba1a1a]">71%</span>
+              <span class="material-symbols-outlined text-slate-300 text-lg">chevron_right</span>
+            </div>
+          </div>
+
+          <!-- AI INSIGHT STRIP -->
+          <div class="rounded-[14px] p-4 border-l-[3px] border-[#00687a] bg-white/40 border border-slate-100 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-[#00687a] material-fill">psychology</span>
+              <p class="text-xs text-[#070235] font-medium">
+                <strong>AI Notice:</strong> Arjun Mehta shows 3 burnout indicators. Consider workload audit.
+              </p>
+            </div>
+            <button onclick="simulateAIPrompt('Review Arjun Mehta burnout indicators and suggest rebalancing')" class="text-xs font-semibold text-[#00687a] hover:underline whitespace-nowrap font-geist flex items-center gap-0.5">
+              Review Now <span class="material-symbols-outlined text-xs">arrow_forward</span>
+            </button>
+          </div>
+
+          <!-- 3. Priya Sharma -->
+          <div class="employee-card glass-card rounded-[14px] p-4 flex items-center gap-4 hover:translate-y-[-2px] transition-all duration-200 active:scale-[0.98] cursor-pointer" data-dept="IT" data-name="priya sharma" data-skills="cloud linux terraform" data-role="Cloud Architect">
+            <div class="w-12 h-12 rounded-full bg-teal-50 text-[#00687a] font-geist font-bold flex items-center justify-center text-base flex-shrink-0 border-2 border-[#00687a]/20">
+              PS
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5">
+                <h3 class="font-geist font-bold text-sm text-[#070235] truncate">Priya Sharma</h3>
+                <span class="material-symbols-outlined text-[#00687a] text-sm material-fill flex-shrink-0">verified</span>
+              </div>
+              <p class="text-[11px] text-slate-500">Cloud Architect • IT</p>
+              <div class="flex flex-wrap gap-1.5 mt-1.5">
+                <span class="text-[9px] font-semibold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">Cloud</span>
+                <span class="text-[9px] font-semibold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">Linux</span>
+                <span class="text-[9px] font-semibold font-geist text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Terraform</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#009d6c]"></span>
+              <span class="text-xs font-bold font-geist text-[#009d6c]">88%</span>
+              <span class="material-symbols-outlined text-slate-300 text-lg">chevron_right</span>
+            </div>
+          </div>
+
+          <!-- 4. Rahul Verma -->
+          <div class="employee-card glass-card rounded-[14px] p-4 flex items-center gap-4 hover:translate-y-[-2px] transition-all duration-200 active:scale-[0.98] cursor-pointer" data-dept="Engineering" data-name="rahul verma" data-skills="sql postgresql redis" data-role="DB Engineer">
+            <div class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-700 font-geist font-bold flex items-center justify-center text-base flex-shrink-0">
+              RV
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5">
+                <h3 class="font-geist font-bold text-sm text-[#070235] truncate">Rahul Verma</h3>
+              </div>
+              <p class="text-[11px] text-slate-500">DB Engineer • Engineering</p>
+              <div class="flex flex-wrap gap-1.5 mt-1.5">
+                <span class="text-[9px] font-semibold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">SQL</span>
+                <span class="text-[9px] font-semibold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">PostgreSQL</span>
+                <span class="text-[9px] font-semibold font-geist text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Redis</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#009d6c]"></span>
+              <span class="text-xs font-bold font-geist text-[#009d6c]">95%</span>
+              <span class="material-symbols-outlined text-slate-300 text-lg">chevron_right</span>
+            </div>
+          </div>
+
+          <!-- 5. Sunita Patel -->
+          <div class="employee-card glass-card rounded-[14px] p-4 flex items-center gap-4 hover:translate-y-[-2px] transition-all duration-200 active:scale-[0.98] cursor-pointer" data-dept="Product" data-name="sunita patel" data-skills="roadmapping figma" data-role="Product Lead">
+            <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-600 font-geist font-bold flex items-center justify-center text-base flex-shrink-0 border-2 border-amber-200">
+              SP
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5">
+                <h3 class="font-geist font-bold text-sm text-[#070235] truncate">Sunita Patel</h3>
+              </div>
+              <p class="text-[11px] text-slate-500">Product Lead • Product</p>
+              <div class="flex flex-wrap gap-1.5 mt-1.5">
+                <span class="text-[9px] font-semibold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">Roadmapping</span>
+                <span class="text-[9px] font-semibold font-geist text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Figma</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+              <span class="text-xs font-bold font-geist text-amber-600">67%</span>
+              <span class="material-symbols-outlined text-slate-300 text-lg">chevron_right</span>
+            </div>
+          </div>
+
+          <!-- 6. Vikas Singh -->
+          <div class="employee-card glass-card rounded-[14px] p-4 flex items-center gap-4 hover:translate-y-[-2px] transition-all duration-200 active:scale-[0.98] cursor-pointer" data-dept="IT" data-name="vikas singh" data-skills="jenkins docker python" data-role="DevOps">
+            <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-700 font-geist font-bold flex items-center justify-center text-base flex-shrink-0">
+              VS
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5">
+                <h3 class="font-geist font-bold text-sm text-[#070235] truncate">Vikas Singh</h3>
+              </div>
+              <p class="text-[11px] text-slate-500">DevOps • IT</p>
+              <div class="flex flex-wrap gap-1.5 mt-1.5">
+                <span class="text-[9px] font-semibold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">Jenkins</span>
+                <span class="text-[9px] font-semibold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">Docker</span>
+                <span class="text-[9px] font-semibold font-geist text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Python</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#009d6c]"></span>
+              <span class="text-xs font-bold font-geist text-[#009d6c]">89%</span>
+              <span class="material-symbols-outlined text-slate-300 text-lg">chevron_right</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGINATION / LOAD MORE -->
+        <div class="flex flex-col items-center gap-2 pt-2">
+          <span class="text-[11px] text-slate-400 font-medium">Showing 6 of 1,240 employees</span>
+          <button class="px-6 py-2 border border-slate-200 bg-white/50 text-[#00687a] font-geist font-semibold text-xs rounded-[8px] hover:bg-slate-50 transition-colors">
+            Load 20 more
+          </button>
+        </div>
+
+        <!-- Empty state (hidden by default) -->
+        <div id="employee-empty-state" class="hidden flex flex-col items-center justify-center py-12 text-center">
+          <span class="material-symbols-outlined text-4xl text-slate-300 mb-3">search_off</span>
+          <p class="text-sm text-slate-500 font-medium">No results found</p>
+          <p class="text-xs text-slate-400 mt-1">Try adjusting your search or filter criteria</p>
+        </div>
+
+      </section>
+
+      <!-- ============================================ -->
+      <!-- 3. AI ASSISTANT (CHAT INTERFACE) SCREEN     -->
+      <!-- ============================================ -->
+      <section id="screen-ai" class="screen-section absolute inset-0 w-full h-full flex flex-col justify-between hidden">
+        
+        <!-- FIXED CHAT HEADER -->
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3 flex-shrink-0 bg-white/40 backdrop-blur-[4px]">
+          <div class="w-10 h-10 rounded-[8px] bg-gradient-to-br from-[#070235] to-[#00687a] flex items-center justify-center text-white">
+            <span class="material-symbols-outlined text-2xl material-fill">bubble_chart</span>
+          </div>
+          <div>
+            <h1 class="font-geist font-bold text-base text-[#070235]">AI Workforce Intelligence Assistant</h1>
+            <p class="text-[11px] text-[#00687a] font-semibold">Active reasoning model • Online</p>
+          </div>
+        </div>
+
+        <!-- SCROLLABLE CHAT MESSAGES AREA -->
+        <div id="chat-messages-container" class="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col">
+          
+          <!-- User message bubble (Right Aligned) -->
+          <div class="flex justify-end items-start gap-3 ml-12">
+            <div class="flex flex-col items-end space-y-1">
+              <div class="bg-[#070235] text-white px-5 py-3 rounded-2xl rounded-tr-sm text-sm shadow-sm leading-relaxed">
+                Who can replace Rahul for the Database Migration task tomorrow?
+              </div>
+              <span class="text-[10px] text-slate-400 font-medium">You • 10:24 AM</span>
+            </div>
+            <div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200 flex-shrink-0">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120&h=120" alt="User Avatar" class="w-full h-full object-cover">
+            </div>
+          </div>
+
+          <!-- AI response bubble 1 (Left Aligned) -->
+          <div class="flex justify-start items-start gap-3 mr-12">
+            <div class="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center text-[#00687a] border border-[#00687a]/20 flex-shrink-0">
+              <span class="material-symbols-outlined text-lg material-fill">smart_toy</span>
+            </div>
+            <div class="flex flex-col items-start space-y-1">
+              <div class="glass-card text-[#0b1c30] px-5 py-3 rounded-2xl rounded-tl-sm text-sm leading-relaxed">
+                I recommend <span class="font-bold text-[#00687a]">Ajay (98% match)</span> or <span class="font-bold text-[#00687a]">Vikas (89% match)</span>. Ajay has handled 5 similar SQL projects and is 100% available.
+              </div>
+              <span class="text-[10px] text-slate-400 font-medium">WISE Intelligence • 10:24 AM</span>
+            </div>
+          </div>
+
+          <!-- AI response bubble 2 -->
+          <div class="flex justify-start items-start gap-3 mr-12">
+            <!-- Spacer to align with previous AI response -->
+            <div class="w-8 h-8 flex-shrink-0"></div>
+            
+            <div class="flex flex-col items-start space-y-4 w-full max-w-lg">
+              <div class="glass-card text-[#0b1c30] px-5 py-3 rounded-2xl rounded-tl-sm text-sm leading-relaxed">
+                Would you like me to generate the auto-assignment and notify the team?
+              </div>
+
+              <!-- Quick action buttons -->
+              <div class="flex flex-wrap gap-2">
+                <button onclick="alert('Assignment scheduled and notifications dispatched!')" class="px-4 py-2 bg-[#070235] hover:bg-[#070235]/95 text-white text-xs font-semibold font-geist rounded-[8px] transition-colors shadow-sm">
+                  Yes, Assign
+                </button>
+                <button onclick="switchTab('skills')" class="px-4 py-2 border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 text-xs font-semibold font-geist rounded-[8px] transition-colors">
+                  Show Skill Graph
+                </button>
+              </div>
+
+              <!-- Match Analysis Card below actions -->
+              <div class="glass-card rounded-[14px] p-4 w-full border border-[rgba(229,238,255,0.7)] shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
+                  <h4 class="font-geist font-bold text-xs text-[#00687a]">Workforce Match Analysis</h4>
+                  <span class="text-[10px] text-slate-500 font-medium font-geist">Database Migration</span>
+                </div>
+                
+                <div class="space-y-3">
+                  <!-- Ajay Sharma -->
+                  <div>
+                    <div class="flex justify-between text-xs font-medium text-[#070235] mb-1">
+                      <span>Ajay Sharma</span>
+                      <span class="text-[#009d6c] font-bold">98% Match</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                      <div class="bg-[#00687a] h-full rounded-full transition-all duration-1000" style="width: 98%;"></div>
+                    </div>
+                  </div>
+                  
+                  <!-- Vikas Singh -->
+                  <div>
+                    <div class="flex justify-between text-xs font-medium text-[#070235] mb-1">
+                      <span>Vikas Singh</span>
+                      <span class="text-slate-500 font-bold">89% Match</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                      <div class="bg-[#00687a]/60 h-full rounded-full transition-all duration-1000" style="width: 89%;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- FIXED BOTTOM INPUT BAR -->
+        <div class="p-4 border-t border-slate-100 bg-white/50 backdrop-blur-[12px] flex-shrink-0">
+          <form id="chat-input-form" onsubmit="handleChatSubmit(event)" class="max-w-3xl mx-auto flex items-center gap-2">
+            <div class="flex-1 relative flex items-center bg-white border border-slate-200 rounded-[14px] px-3 focus-within:ring-1 focus-within:ring-[#00687a] focus-within:border-[#00687a] transition-all">
+              
+              <!-- Text input -->
+              <input type="text" id="chat-input-text" autocomplete="off" placeholder="Ask anything about your workforce..." class="w-full py-3 bg-transparent border-0 focus:ring-0 text-sm placeholder-slate-400 text-[#070235]">
+              
+              <!-- Quick Actions inside input bar -->
+              <div class="flex items-center gap-1 flex-shrink-0 text-slate-400">
+                <button type="button" class="p-1.5 hover:text-[#00687a] hover:bg-slate-50 rounded-full transition-colors" title="Attach file">
+                  <span class="material-symbols-outlined text-xl">attach_file</span>
+                </button>
+                <button type="button" class="p-1.5 hover:text-[#00687a] hover:bg-slate-50 rounded-full transition-colors" title="Voice Input">
+                  <span class="material-symbols-outlined text-xl">mic</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Send button -->
+            <button type="submit" class="w-12 h-12 rounded-full bg-[#070235] hover:bg-[#070235]/95 text-white flex items-center justify-center transition-all shadow-sm active:scale-95 flex-shrink-0">
+              <span class="material-symbols-outlined text-xl">send</span>
+            </button>
+          </form>
+        </div>
+
+      </section>
+
+      <!-- ============================================ -->
+      <!-- 4. SKILL MATRIX (ORG HEATMAP) SCREEN        -->
+      <!-- ============================================ -->
+      <section id="screen-skills" class="screen-section absolute inset-0 w-full h-full overflow-y-auto px-4 md:px-8 py-6 space-y-6 hidden">
+        
+        <!-- HEADER -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 class="font-geist font-bold text-2xl text-[#070235] flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#00687a]">hub</span>
+              Organization Heatmap
+            </h1>
+            <p class="text-xs text-slate-500">
+              Real-time intelligence across technical proficiencies and departmental gaps. Visualizing 248 skills across 12 departments.
+            </p>
+          </div>
+          <button onclick="simulateAIPrompt('Show the full organization skill graph')" class="px-5 py-2.5 bg-[#070235] hover:bg-[#070235]/90 text-white text-xs font-semibold font-geist rounded-[8px] transition-all flex items-center gap-2 shadow-sm active:scale-95">
+            <span class="material-symbols-outlined text-base">hub</span>
+            Open Skill Graph
+          </button>
+        </div>
+
+        <!-- FILTERS BAR -->
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1">
+            <input type="text" id="heatmap-search" oninput="filterHeatmap()" placeholder="Search by Department or Skill..." class="w-full pl-10 pr-4 py-2.5 bg-white/70 border border-slate-200 text-sm focus:ring-1 focus:ring-[#00687a] focus:border-[#00687a] rounded-[8px] transition-all">
+            <span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-sm">search</span>
+          </div>
+          <div class="flex gap-2 flex-wrap">
+            <span class="px-3.5 py-2 rounded-[8px] text-xs font-semibold font-geist border border-slate-200 bg-white/50 text-slate-600 flex items-center gap-1.5">
+              Department: IT <span class="material-symbols-outlined text-sm">expand_more</span>
+            </span>
+            <span class="px-3.5 py-2 rounded-[8px] text-xs font-semibold font-geist border border-slate-200 bg-white/50 text-slate-600 flex items-center gap-1.5">
+              Skill: Python <span class="material-symbols-outlined text-sm">expand_more</span>
+            </span>
+            <span class="px-3.5 py-2 rounded-[8px] text-xs font-semibold font-geist border border-slate-200 bg-white/50 text-[#00687a] flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm">add</span> Add filter
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- HEATMAP GRID (spans 2 columns) -->
+          <div class="lg:col-span-2 glass-card rounded-[14px] p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h2 class="font-geist font-bold text-base text-[#070235]">Cross-Department Proficiency Heatmap</h2>
+              <span class="text-[10px] font-bold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full">248 Skills Tracked</span>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full border-collapse heatmap-table">
+                <thead>
+                  <tr>
+                    <th class="p-2 text-left text-[10px] font-semibold text-slate-500 uppercase tracking-wider font-geist border-b border-slate-100 w-28">Department</th>
+                    <th class="p-2 text-center text-[10px] font-semibold text-slate-500 uppercase tracking-wider font-geist border-b border-slate-100">PYTHON</th>
+                    <th class="p-2 text-center text-[10px] font-semibold text-slate-500 uppercase tracking-wider font-geist border-b border-slate-100">CLOUD</th>
+                    <th class="p-2 text-center text-[10px] font-semibold text-slate-500 uppercase tracking-wider font-geist border-b border-slate-100">SECURITY</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <!-- District Court IT -->
+                  <tr class="heatmap-row cursor-pointer hover:bg-slate-50/50 transition-colors" data-dept="District Court IT" onclick="showHeatmapDetails(this)">
+                    <td class="p-2 text-xs font-semibold text-[#070235] font-geist">District Court IT</td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#1e1b4b] text-white flex items-center justify-center text-[10px] font-bold shadow-sm" data-score="88" data-skill="Python" title="Dept: District Court IT | Skill: Python | Score: 88%">88%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a] text-white flex items-center justify-center text-[10px] font-bold" data-score="72" data-skill="Cloud" title="Dept: District Court IT | Skill: Cloud | Score: 72%">72%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#e5eeff] text-[#070235] flex items-center justify-center text-[10px] font-bold" data-score="35" data-skill="Security" title="Dept: District Court IT | Skill: Security | Score: 35%">35%</div>
+                    </td>
+                  </tr>
+                  <!-- Public Safety -->
+                  <tr class="heatmap-row cursor-pointer hover:bg-slate-50/50 transition-colors" data-dept="Public Safety" onclick="showHeatmapDetails(this)">
+                    <td class="p-2 text-xs font-semibold text-[#070235] font-geist">Public Safety</td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a] text-white flex items-center justify-center text-[10px] font-bold" data-score="65" data-skill="Python" title="Dept: Public Safety | Skill: Python | Score: 65%">65%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#1e1b4b] text-white flex items-center justify-center text-[10px] font-bold shadow-sm" data-score="92" data-skill="Cloud" title="Dept: Public Safety | Skill: Cloud | Score: 92%">92%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a] text-white flex items-center justify-center text-[10px] font-bold" data-score="68" data-skill="Security" title="Dept: Public Safety | Skill: Security | Score: 68%">68%</div>
+                    </td>
+                  </tr>
+                  <!-- Civil Services -->
+                  <tr class="heatmap-row cursor-pointer hover:bg-slate-50/50 transition-colors" data-dept="Civil Services" onclick="showHeatmapDetails(this)">
+                    <td class="p-2 text-xs font-semibold text-[#070235] font-geist">Civil Services</td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a]/30 text-[#070235] flex items-center justify-center text-[10px] font-bold" data-score="42" data-skill="Python" title="Dept: Civil Services | Skill: Python | Score: 42%">42%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a]/80 text-white flex items-center justify-center text-[10px] font-bold" data-score="78" data-skill="Cloud" title="Dept: Civil Services | Skill: Cloud | Score: 78%">78%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#e5eeff] text-[#070235] flex items-center justify-center text-[10px] font-bold" data-score="28" data-skill="Security" title="Dept: Civil Services | Skill: Security | Score: 28%">28%</div>
+                    </td>
+                  </tr>
+                  <!-- Health & Human -->
+                  <tr class="heatmap-row cursor-pointer hover:bg-slate-50/50 transition-colors" data-dept="Health & Human" onclick="showHeatmapDetails(this)">
+                    <td class="p-2 text-xs font-semibold text-[#070235] font-geist">Health & Human</td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#e5eeff] text-[#070235] flex items-center justify-center text-[10px] font-bold" data-score="18" data-skill="Python" title="Dept: Health & Human | Skill: Python | Score: 18%">18%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a]/50 text-white flex items-center justify-center text-[10px] font-bold" data-score="55" data-skill="Cloud" title="Dept: Health & Human | Skill: Cloud | Score: 55%">55%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#e5eeff] text-[#070235] flex items-center justify-center text-[10px] font-bold" data-score="12" data-skill="Security" title="Dept: Health & Human | Skill: Security | Score: 12%">12%</div>
+                    </td>
+                  </tr>
+                  <!-- Executive Office -->
+                  <tr class="heatmap-row cursor-pointer hover:bg-slate-50/50 transition-colors" data-dept="Executive Office" onclick="showHeatmapDetails(this)">
+                    <td class="p-2 text-xs font-semibold text-[#070235] font-geist">Executive Office</td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a]/20 bg-transparent border border-dashed border-slate-300 text-slate-400 flex items-center justify-center text-[10px]" data-score="0" data-skill="Python" title="Dept: Executive Office | Skill: Python | Score: N/A">--</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#e5eeff] text-[#070235] flex items-center justify-center text-[10px] font-bold" data-score="22" data-skill="Cloud" title="Dept: Executive Office | Skill: Cloud | Score: 22%">22%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#e5eeff] text-[#070235] flex items-center justify-center text-[10px] font-bold" data-score="15" data-skill="Security" title="Dept: Executive Office | Skill: Security | Score: 15%">15%</div>
+                    </td>
+                  </tr>
+                  <!-- Finance Dept -->
+                  <tr class="heatmap-row cursor-pointer hover:bg-slate-50/50 transition-colors" data-dept="Finance Dept" onclick="showHeatmapDetails(this)">
+                    <td class="p-2 text-xs font-semibold text-[#070235] font-geist">Finance Dept</td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a] text-white flex items-center justify-center text-[10px] font-bold" data-score="82" data-skill="Python" title="Dept: Finance Dept | Skill: Python | Score: 82%">82%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#1e1b4b] text-white flex items-center justify-center text-[10px] font-bold shadow-sm" data-score="95" data-skill="Cloud" title="Dept: Finance Dept | Skill: Cloud | Score: 95%">95%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a] text-white flex items-center justify-center text-[10px] font-bold" data-score="70" data-skill="Security" title="Dept: Finance Dept | Skill: Security | Score: 70%">70%</div>
+                    </td>
+                  </tr>
+                  <!-- Cyber Task Force -->
+                  <tr class="heatmap-row cursor-pointer hover:bg-slate-50/50 transition-colors" data-dept="Cyber Task Force" onclick="showHeatmapDetails(this)">
+                    <td class="p-2 text-xs font-semibold text-[#070235] font-geist">Cyber Task Force</td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a]/80 text-white flex items-center justify-center text-[10px] font-bold" data-score="75" data-skill="Python" title="Dept: Cyber Task Force | Skill: Python | Score: 75%">75%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#e5eeff] text-[#070235] flex items-center justify-center text-[10px] font-bold" data-score="30" data-skill="Cloud" title="Dept: Cyber Task Force | Skill: Cloud | Score: 30%">30%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#1e1b4b] text-white flex items-center justify-center text-[10px] font-bold shadow-sm" data-score="96" data-skill="Security" title="Dept: Cyber Task Force | Skill: Security | Score: 96%">96%</div>
+                    </td>
+                  </tr>
+                  <!-- Field Ops -->
+                  <tr class="heatmap-row cursor-pointer hover:bg-slate-50/50 transition-colors" data-dept="Field Ops" onclick="showHeatmapDetails(this)">
+                    <td class="p-2 text-xs font-semibold text-[#070235] font-geist">Field Ops</td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#e5eeff] text-[#070235] flex items-center justify-center text-[10px] font-bold" data-score="25" data-skill="Python" title="Dept: Field Ops | Skill: Python | Score: 25%">25%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a]/40 text-white flex items-center justify-center text-[10px] font-bold" data-score="48" data-skill="Cloud" title="Dept: Field Ops | Skill: Cloud | Score: 48%">48%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a] text-white flex items-center justify-center text-[10px] font-bold" data-score="60" data-skill="Security" title="Dept: Field Ops | Skill: Security | Score: 60%">60%</div>
+                    </td>
+                  </tr>
+                  <!-- R&D Hub -->
+                  <tr class="heatmap-row cursor-pointer hover:bg-slate-50/50 transition-colors" data-dept="R&amp;D Hub" onclick="showHeatmapDetails(this)">
+                    <td class="p-2 text-xs font-semibold text-[#070235] font-geist">R&amp;D Hub</td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#1e1b4b] text-white flex items-center justify-center text-[10px] font-bold shadow-sm" data-score="98" data-skill="Python" title="Dept: R&amp;D Hub | Skill: Python | Score: 98%">98%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a] text-white flex items-center justify-center text-[10px] font-bold" data-score="85" data-skill="Cloud" title="Dept: R&amp;D Hub | Skill: Cloud | Score: 85%">85%</div>
+                    </td>
+                    <td class="p-2 text-center">
+                      <div class="heatmap-cell mx-auto w-10 h-10 rounded-[8px] bg-[#00687a]/60 text-white flex items-center justify-center text-[10px] font-bold" data-score="62" data-skill="Security" title="Dept: R&amp;D Hub | Skill: Security | Score: 62%">62%</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Legends -->
+            <div class="flex flex-wrap items-center justify-end gap-3 text-[10px] font-semibold font-geist text-slate-500 pt-2 border-t border-slate-100">
+              <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-[#1e1b4b]"></span> High (80-100%)</span>
+              <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-[#00687a]"></span> Medium-High (60-80%)</span>
+              <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-[#e5eeff]"></span> Low (&lt; 40%)</span>
+              <span class="flex items-center gap-1"><span class="w-3 h-3 rounded border border-dashed border-slate-300"></span> No data</span>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: Surplus & Gaps + AI Suggestion -->
+          <div class="space-y-6">
+
+            <!-- Skill Surplus Section -->
+            <div class="glass-card rounded-[14px] p-5 space-y-4">
+              <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                <span class="material-symbols-outlined text-[#00687a] material-fill">trending_up</span>
+                <h2 class="font-geist font-bold text-sm text-[#070235]">Top Skill Surplus</h2>
+              </div>
+              <div class="space-y-4">
+                <div>
+                  <div class="flex justify-between text-xs font-medium text-[#070235] mb-1">
+                    <span class="font-geist font-semibold">Cloud Architecture</span>
+                    <span class="text-[#009d6c] font-bold">+14%</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div class="bg-[#070235] h-full rounded-full wise-progress" data-value="14" style="width: 0%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs font-medium text-[#070235] mb-1">
+                    <span class="font-geist font-semibold">Enterprise SQL</span>
+                    <span class="text-[#009d6c] font-bold">+8%</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div class="bg-[#070235] h-full rounded-full wise-progress" data-value="8" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Critical Gaps Section -->
+            <div class="glass-card rounded-[14px] p-5 space-y-4">
+              <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                <span class="material-symbols-outlined text-[#ba1a1a] material-fill">warning</span>
+                <h2 class="font-geist font-bold text-sm text-[#070235]">Critical Gaps</h2>
+              </div>
+              <div class="space-y-4">
+                <div>
+                  <div class="flex justify-between text-xs font-medium text-[#070235] mb-1">
+                    <span class="font-geist font-semibold">Cyber Defense</span>
+                    <span class="text-[#ba1a1a] font-bold">-22%</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div class="bg-[#ba1a1a] h-full rounded-full wise-progress alert-progress" data-value="22" style="width: 0%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs font-medium text-[#070235] mb-1">
+                    <span class="font-geist font-semibold">Go Development</span>
+                    <span class="text-[#ba1a1a] font-bold">-15%</span>
+                  </div>
+                  <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div class="bg-[#ba1a1a] h-full rounded-full wise-progress alert-progress" data-value="15" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Suggestion Card -->
+            <div class="glass-card rounded-[14px] p-5 relative overflow-hidden">
+              <div class="absolute -right-6 -bottom-6 opacity-[0.04]">
+                <span class="material-symbols-outlined text-[120px] text-[#070235]">psychology</span>
+              </div>
+              <div class="relative z-10 space-y-3">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[#00687a] material-fill">auto_awesome</span>
+                  <h2 class="font-geist font-bold text-sm text-[#070235]">AI Suggestion</h2>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Transfer 2 Cloud Experts from Finance to Field Ops to bridge the 2024 Strategy Gap.
+                </p>
+                <button onclick="simulateAIPrompt('Generate mobility plan for transferring Cloud Experts from Finance to Field Ops')" class="text-xs font-semibold text-[#00687a] hover:underline flex items-center gap-1 font-geist">
+                  Generate Mobility Plan <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Heatmap Detail Bottom Sheet Popover (hidden by default) -->
+        <div id="heatmap-detail-sheet" class="hidden fixed inset-x-0 bottom-0 z-40 p-4 md:p-6">
+          <div class="glass-card rounded-[14px] p-5 max-w-lg mx-auto shadow-lg">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 id="heatmap-detail-title" class="font-geist font-bold text-sm text-[#070235]">Department Details</h3>
+              <button onclick="closeHeatmapDetails()" class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors">
+                <span class="material-symbols-outlined text-sm">close</span>
+              </button>
+            </div>
+            <div id="heatmap-detail-body" class="pt-3 space-y-3 text-xs text-slate-600">
+              <p>Select a row to view department skill details.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Backdrop for detail sheet -->
+        <div id="heatmap-detail-backdrop" class="hidden fixed inset-0 bg-black/20 z-30" onclick="closeHeatmapDetails()"></div>
+
+      </section>
+
+      <!-- ============================================ -->
+      <!-- 5. ALERTS & INTELLIGENCE FEED SCREEN        -->
+      <!-- ============================================ -->
+      <section id="screen-alerts" class="screen-section absolute inset-0 w-full h-full overflow-y-auto px-4 md:px-8 py-6 space-y-6 hidden">
+        
+        <!-- HEADER -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h1 class="font-geist font-bold text-xl md:text-2xl text-[#070235]">Alerts &amp; Intelligence Feed</h1>
+            <p class="text-xs text-slate-500" id="alert-header-subtitle">12 new alerts since your last session</p>
+          </div>
+          <button onclick="markAllAlertsRead()" class="text-xs font-semibold text-[#00687a] hover:underline font-geist flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">done_all</span>
+            Mark all read
+          </button>
+        </div>
+
+        <!-- FILTER TABS -->
+        <div class="border-b border-slate-100 overflow-x-auto hide-scrollbar">
+          <div class="flex gap-6 min-w-max">
+            <button id="alert-filter-all" onclick="filterAlertCards('all')" class="alert-filter-tab active pb-2 text-sm font-geist font-semibold text-[#00687a] border-b-2 border-[#00687a] transition-colors whitespace-nowrap">All (12)</button>
+            <button id="alert-filter-critical" onclick="filterAlertCards('critical')" class="alert-filter-tab pb-2 text-sm font-geist font-semibold text-slate-500 border-b-2 border-transparent hover:text-slate-700 transition-colors whitespace-nowrap">Critical (3)</button>
+            <button id="alert-filter-risky" onclick="filterAlertCards('risky')" class="alert-filter-tab pb-2 text-sm font-geist font-semibold text-slate-500 border-b-2 border-transparent hover:text-slate-700 transition-colors whitespace-nowrap">At Risk (5)</button>
+            <button id="alert-filter-ai" onclick="filterAlertCards('ai')" class="alert-filter-tab pb-2 text-sm font-geist font-semibold text-slate-500 border-b-2 border-transparent hover:text-slate-700 transition-colors whitespace-nowrap">AI Flags (4)</button>
+          </div>
+        </div>
+
+        <!-- ALERT CARDS LIST -->
+        <div id="alert-cards-container" class="space-y-4">
+          
+          <!-- CARD 1: Critical (Arjun Mehta Burnout) -->
+          <div class="alert-card glass-card rounded-[14px] p-5 border-l-[3px] border-l-[#ba1a1a] flex flex-col sm:flex-row sm:items-start gap-4" data-alert-type="critical" data-alert-id="1">
+            <button onclick="dismissAlert(this)" class="absolute top-3 right-3 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition-colors sm:static sm:flex-shrink-0 sm:order-last">
+              <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+            <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-[#ba1a1a] flex-shrink-0">
+              <span class="material-symbols-outlined material-fill text-lg">warning</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold font-geist text-white bg-[#ba1a1a] px-2 py-0.5 rounded-full uppercase tracking-wider">Critical</span>
+              </div>
+              <h3 class="font-geist font-bold text-sm text-[#070235]">Arjun Mehta — Burnout threshold exceeded</h3>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">Logged 68hrs this week across 3 active sprints. Recommend immediate workload rebalancing.</p>
+              <div class="flex items-center gap-3 mt-3">
+                <span class="text-xs text-slate-400 font-medium">Engineering • 2 min ago</span>
+                <div class="flex gap-2 ml-auto">
+                  <button onclick="switchTab('profile')" class="px-3 py-1.5 border border-slate-200 bg-white text-slate-600 text-[10px] font-semibold font-geist rounded-[8px] hover:bg-slate-50 transition-colors">View Profile</button>
+                  <button onclick="simulateAIPrompt('Reassign Arjun Mehta tasks to balance workload')" class="px-3 py-1.5 bg-[#070235] text-white text-[10px] font-semibold font-geist rounded-[8px] hover:bg-[#070235]/90 transition-colors">Reassign Tasks</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 2: At Risk (Product Team Sprint Velocity) -->
+          <div class="alert-card glass-card rounded-[14px] p-5 border-l-[3px] border-l-amber-500 flex flex-col sm:flex-row sm:items-start gap-4 pulse-amber-border" data-alert-type="risky" data-alert-id="2">
+            <button onclick="dismissAlert(this)" class="absolute top-3 right-3 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition-colors sm:static sm:flex-shrink-0 sm:order-last">
+              <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+            <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 flex-shrink-0">
+              <span class="material-symbols-outlined text-lg">trending_down</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold font-geist text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full uppercase tracking-wider">At Risk</span>
+              </div>
+              <h3 class="font-geist font-bold text-sm text-[#070235]">Product Team — Sprint velocity dropped 31%</h3>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">Below baseline for 3 consecutive weeks. 2 key contributors flagged for low engagement scores.</p>
+              <div class="flex items-center gap-3 mt-3">
+                <span class="text-xs text-slate-400 font-medium">Product • 18 min ago</span>
+                <div class="flex gap-2 ml-auto">
+                  <button onclick="simulateAIPrompt('View team insights for Product sprint velocity drop')" class="px-3 py-1.5 border border-slate-200 bg-white text-slate-600 text-[10px] font-semibold font-geist rounded-[8px] hover:bg-slate-50 transition-colors">View Team Insights</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 3: AI Flag (Skill Gap in Cyber Task Force) -->
+          <div class="alert-card glass-card rounded-[14px] p-5 border-l-[3px] border-l-[#00687a] flex flex-col sm:flex-row sm:items-start gap-4" data-alert-type="ai" data-alert-id="3">
+            <button onclick="dismissAlert(this)" class="absolute top-3 right-3 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition-colors sm:static sm:flex-shrink-0 sm:order-last">
+              <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+            <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-[#00687a] flex-shrink-0">
+              <span class="material-symbols-outlined material-fill text-lg">psychology</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full uppercase tracking-wider">AI Flag</span>
+              </div>
+              <h3 class="font-geist font-bold text-sm text-[#070235]">Skill gap detected in Cyber Task Force</h3>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">Zero coverage for Go Development. 4 upcoming projects require this skill by Q1.</p>
+              <div class="flex items-center gap-3 mt-3">
+                <span class="text-xs text-slate-400 font-medium">AI Analysis • 1 hr ago</span>
+                <div class="flex gap-2 ml-auto">
+                  <button onclick="simulateAIPrompt('Generate hiring plan for Go Development in Cyber Task Force')" class="px-3 py-1.5 text-[#00687a] text-[10px] font-semibold font-geist hover:underline transition-colors flex items-center gap-0.5">
+                    Generate Hiring Plan <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 4: Informational (Priya Sharma Certification) -->
+          <div class="alert-card glass-card rounded-[14px] p-5 border-l-[3px] border-l-slate-300 flex flex-col sm:flex-row sm:items-start gap-4" data-alert-type="info" data-alert-id="4">
+            <button onclick="dismissAlert(this)" class="absolute top-3 right-3 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition-colors sm:static sm:flex-shrink-0 sm:order-last">
+              <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+            <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 flex-shrink-0">
+              <span class="material-symbols-outlined text-lg">info</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+              </div>
+              <h3 class="font-geist font-bold text-sm text-[#070235]">Priya Sharma completed Advanced Cloud Arch certification</h3>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">Learning path milestone achieved. Eligible for Cloud Lead role transition.</p>
+              <div class="flex items-center gap-3 mt-3">
+                <span class="text-xs text-slate-400 font-medium">L&amp;D • 3 hr ago</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 5: Critical (Data Center Outage Risk) -->
+          <div class="alert-card glass-card rounded-[14px] p-5 border-l-[3px] border-l-[#ba1a1a] flex flex-col sm:flex-row sm:items-start gap-4" data-alert-type="critical" data-alert-id="5">
+            <button onclick="dismissAlert(this)" class="absolute top-3 right-3 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition-colors sm:static sm:flex-shrink-0 sm:order-last">
+              <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+            <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-[#ba1a1a] flex-shrink-0">
+              <span class="material-symbols-outlined material-fill text-lg">warning</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold font-geist text-white bg-[#ba1a1a] px-2 py-0.5 rounded-full uppercase tracking-wider">Critical</span>
+              </div>
+              <h3 class="font-geist font-bold text-sm text-[#070235]">Data Center — East-1 cooling failure imminent</h3>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">Temperature rising above threshold. Failover to West-2 recommended within 45 minutes.</p>
+              <div class="flex items-center gap-3 mt-3">
+                <span class="text-xs text-slate-400 font-medium">Infrastructure • 12 min ago</span>
+                <div class="flex gap-2 ml-auto">
+                  <button onclick="simulateAIPrompt('Initiate failover procedure for East-1 data center')" class="px-3 py-1.5 bg-[#070235] text-white text-[10px] font-semibold font-geist rounded-[8px] hover:bg-[#070235]/90 transition-colors">Initiate Failover</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 6: AI Flag (Reskilling Recommendation) -->
+          <div class="alert-card glass-card rounded-[14px] p-5 border-l-[3px] border-l-[#00687a] flex flex-col sm:flex-row sm:items-start gap-4" data-alert-type="ai" data-alert-id="6">
+            <button onclick="dismissAlert(this)" class="absolute top-3 right-3 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition-colors sm:static sm:flex-shrink-0 sm:order-last">
+              <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+            <div class="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-[#00687a] flex-shrink-0">
+              <span class="material-symbols-outlined material-fill text-lg">psychology</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold font-geist text-[#00687a] bg-teal-50 px-2 py-0.5 rounded-full uppercase tracking-wider">AI Flag</span>
+              </div>
+              <h3 class="font-geist font-bold text-sm text-[#070235]">Reskilling opportunity for 4 Senior Engineers</h3>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">Transition from legacy Java services to modern Go stack. Estimated 6-week upskilling program available.</p>
+              <div class="flex items-center gap-3 mt-3">
+                <span class="text-xs text-slate-400 font-medium">AI Analysis • 2 hrs ago</span>
+                <div class="flex gap-2 ml-auto">
+                  <button onclick="simulateAIPrompt('Design reskilling program for Java to Go transition')" class="px-3 py-1.5 text-[#00687a] text-[10px] font-semibold font-geist hover:underline transition-colors flex items-center gap-0.5">
+                    View Program <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- BOTTOM SUMMARY STRIP -->
+        <div class="sticky bottom-0 glass-card rounded-[14px] p-4 flex items-center justify-between shadow-md">
+          <p class="text-xs text-slate-600 font-medium flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#ba1a1a]"></span>
+            <span id="alert-summary-text">3 critical alerts require action today</span>
+          </p>
+          <button onclick="switchTab('ai')" class="text-xs font-semibold text-[#00687a] hover:underline flex items-center gap-0.5">
+            View All <span class="material-symbols-outlined text-xs">arrow_forward</span>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ============================================ -->
+      <!-- 6. EMPLOYEE PROFILE SCREEN                  -->
+      <!-- ============================================ -->
+      <section id="screen-profile" class="screen-section absolute inset-0 w-full h-full overflow-y-auto px-4 md:px-8 py-6 space-y-6 hidden">
+        
+        <!-- SECTION 1: HERO SECTION -->
+        <div class="glass-card rounded-[14px] p-6 md:p-8 flex flex-col md:flex-row items-center md:items-end justify-between gap-6">
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <!-- Circular Profile Photo with performance arc ring -->
+            <div class="relative w-28 h-28 md:w-32 md:h-32 flex-shrink-0 flex items-center justify-center">
+              <!-- Outer Gradient Ring -->
+              <div class="absolute inset-0 rounded-full border-[3px] border-slate-200"></div>
+              <div class="absolute inset-0 rounded-full border-[3px] border-t-[#00687a] border-r-[#00687a] border-b-[#00687a] transform rotate-45"></div>
+              
+              <!-- Centered image -->
+              <div class="w-[96px] h-[96px] md:w-[110px] md:h-[110px] rounded-full overflow-hidden border-2 border-white z-10">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200" alt="Alex Sterling Portrait" class="w-full h-full object-cover">
+              </div>
+
+              <!-- Performance Badge Below -->
+              <div class="absolute -bottom-2 z-20 bg-[#00687a] text-white text-[10px] font-bold font-geist px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap">
+                94% Performance
+              </div>
+            </div>
+
+            <!-- Identity info -->
+            <div class="text-center md:text-left space-y-1 mt-2">
+              <div class="flex items-center justify-center md:justify-start gap-1.5">
+                <h2 class="font-geist font-extrabold text-2xl text-[#070235]">Alex Sterling</h2>
+                <span class="material-symbols-outlined text-[#00687a] text-lg material-fill">verified</span>
+              </div>
+              <p class="text-slate-500 font-medium text-sm">Chief People Officer • WISE Corp</p>
+              
+              <!-- Stat pills in a row -->
+              <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-2">
+                <span class="text-xs font-semibold font-geist text-[#070235] bg-white border border-slate-200 px-3 py-1 rounded-full">Experience 12y</span>
+                <span class="text-xs font-semibold font-geist text-[#070235] bg-white border border-slate-200 px-3 py-1 rounded-full">Leave Bal. 5d</span>
+                <span class="text-xs font-semibold font-geist text-[#009d6c] bg-white border border-slate-200 px-3 py-1 rounded-full flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#009d6c]"></span> Active
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit profile/Action buttons -->
+          <div class="flex gap-2">
+            <button onclick="simulateAIPrompt('Review redundant overlaps for Alex Sterling')" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 bg-white text-slate-700 text-xs font-semibold font-geist rounded-[8px] transition-colors flex items-center gap-1">
+              <span class="material-symbols-outlined text-sm">psychology</span> AI Insights
+            </button>
+          </div>
+        </div>
+
+        <!-- BENTO ROW 1: SKILL CLOUD & DIGITAL TWIN -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Skill Cloud Card (glass-card) (Spans 5 columns) -->
+          <div class="lg:col-span-5 glass-card rounded-[14px] p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#00687a]">school</span>
+                <h3 class="font-geist font-bold text-base text-[#070235]">Skill Cloud</h3>
+              </div>
+              <span class="material-symbols-outlined text-slate-400 text-lg cursor-help" title="Validated skill tags showing competence areas">info</span>
+            </div>
+
+            <div class="flex flex-wrap gap-2 pt-1">
+              <!-- Python (Deep Indigo Bg, white text) -->
+              <span class="px-3.5 py-1.5 rounded-full bg-[#070235] text-white text-xs font-semibold font-geist cursor-pointer hover:opacity-90 transition-opacity">Python</span>
+              
+              <!-- SQL (Teal Outline) -->
+              <span class="px-3.5 py-1.5 rounded-full border border-[#00687a] text-[#00687a] text-xs font-semibold font-geist cursor-pointer hover:bg-teal-50/50 transition-colors">SQL</span>
+              
+              <!-- Linux (Indigo Outline) -->
+              <span class="px-3.5 py-1.5 rounded-full border border-indigo-200 text-indigo-700 text-xs font-semibold font-geist cursor-pointer hover:bg-indigo-50/50 transition-colors">Linux</span>
+              
+              <!-- AWS (Teal Bg) -->
+              <span class="px-3.5 py-1.5 rounded-full bg-[#00687a] text-white text-xs font-semibold font-geist cursor-pointer hover:opacity-90 transition-opacity">AWS</span>
+              
+              <!-- System Design (Outline) -->
+              <span class="px-3.5 py-1.5 rounded-full border border-slate-300 text-slate-600 text-xs font-semibold font-geist cursor-pointer hover:bg-slate-50 transition-colors">System Design</span>
+            </div>
+          </div>
+
+          <!-- Digital Twin Insights Card (Spans 7 columns) -->
+          <div class="lg:col-span-7 glass-card rounded-[14px] p-6 space-y-4">
+            <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+              <span class="material-symbols-outlined text-[#00687a] material-fill">trending_up</span>
+              <h3 class="font-geist font-bold text-base text-[#070235]">Digital Twin Insights</h3>
+            </div>
+
+            <div class="space-y-4">
+              <!-- Motivation Strategy -->
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center text-[#00687a] flex-shrink-0">
+                  <span class="material-symbols-outlined text-base">psychology</span>
+                </div>
+                <div class="space-y-0.5">
+                  <h4 class="text-xs font-bold font-geist text-[#070235]">Motivation Strategy</h4>
+                  <p class="text-xs text-slate-600">
+                    Achievement & Growth centric. Skinner Reinforcement recommended for long-term retention.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Burnout Level -->
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center text-[#00687a] flex-shrink-0">
+                  <span class="material-symbols-outlined text-base">favorite</span>
+                </div>
+                <div class="space-y-0.5">
+                  <h4 class="text-xs font-bold font-geist text-[#070235]">Burnout Level</h4>
+                  <p class="text-xs text-slate-600">
+                    Currently <span class="text-[#009d6c] font-bold">Low</span>. Healthy workload balance maintained across 4 major sprints.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Learning Path Progress bar -->
+              <div class="pt-2">
+                <div class="flex justify-between items-center text-xs font-medium text-[#070235] mb-1.5">
+                  <span class="font-geist font-semibold">Learning Path: Advanced Cloud Arch</span>
+                  <span class="text-[#00687a] font-bold">80% Complete</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-[#00687a] h-full rounded-full transition-all duration-1000" style="width: 80%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- BENTO ROW 2: CAREER TIMELINE & REDUNDANCY MATRIX -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Career Timeline (Spans 6 columns) -->
+          <div class="lg:col-span-6 glass-card rounded-[14px] p-6 space-y-6 flex flex-col justify-between">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 class="font-geist font-bold text-base text-[#070235]">Career Timeline</h3>
+              <a href="#" class="text-xs text-[#00687a] hover:underline font-geist font-semibold flex items-center gap-0.5">
+                View Full History <span class="material-symbols-outlined text-sm">open_in_new</span>
+              </a>
+            </div>
+
+            <!-- Vertical left-dotted timeline -->
+            <div class="relative pl-6 space-y-6 timeline-line">
+              <!-- Jan 2024–Present -->
+              <div class="relative">
+                <div class="absolute -left-[30px] top-1 w-4 h-4 rounded-full bg-[#070235] border-2 border-white flex items-center justify-center">
+                  <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 font-bold tracking-wider uppercase font-geist">Jan 2024 – Present</span>
+                  <h4 class="font-geist font-bold text-sm text-[#070235] mt-0.5">Chief People Officer</h4>
+                  <p class="text-xs text-slate-500 mt-1">Leading digital-first HR transformational roadmap across the global workforce ecosystem.</p>
+                </div>
+              </div>
+
+              <!-- 2021–2023 -->
+              <div class="relative">
+                <div class="absolute -left-[30px] top-1 w-4 h-4 rounded-full bg-[#00687a] border-2 border-white"></div>
+                <div>
+                  <span class="text-[10px] text-slate-400 font-bold tracking-wider uppercase font-geist">2021 – 2023</span>
+                  <h4 class="font-geist font-bold text-sm text-[#070235] mt-0.5">VP of Operations</h4>
+                  <p class="text-xs text-slate-500 mt-1">Supervised logistics operations optimization, scaling project performance efficiency by 45%.</p>
+                </div>
+              </div>
+
+              <!-- 2018–2021 -->
+              <div class="relative pb-2">
+                <div class="absolute -left-[30px] top-1 w-4 h-4 rounded-full bg-slate-400 border-2 border-white"></div>
+                <div>
+                  <span class="text-[10px] text-slate-400 font-bold tracking-wider uppercase font-geist">2018 – 2021</span>
+                  <h4 class="font-geist font-bold text-sm text-[#070235] mt-0.5">Strategic Lead</h4>
+                  <p class="text-xs text-slate-500 mt-1">Designed early organizational capability structures, implementing the primary WISE models.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Redundancy Matrix Card (Spans 6 columns) -->
+          <div class="lg:col-span-6 glass-card rounded-[14px] p-6 space-y-4 flex flex-col justify-between">
+            <div class="space-y-4">
+              <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                <span class="material-symbols-outlined text-[#070235]">groups</span>
+                <h3 class="font-geist font-bold text-base text-[#070235]">Redundancy Matrix</h3>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Alex exhibits high strategic versatility. Replacement mapping identifies lateral competency overlaps:
+              </p>
+
+              <!-- Competency Overlaps list -->
+              <div class="space-y-3">
+                <!-- Row 1 -->
+                <div class="flex items-center justify-between p-3 bg-white/40 border border-slate-100 rounded-[10px] hover:border-slate-200 transition-colors">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center font-bold text-xs text-[#00687a] border border-[#00687a]/10">
+                      AJ
+                    </div>
+                    <div>
+                      <h4 class="text-xs font-bold font-geist text-[#070235]">Ajay Varma</h4>
+                      <p class="text-[10px] text-slate-500">Product Lead</p>
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-bold font-geist text-[#009d6c] bg-teal-50 px-2 py-0.5 rounded-full uppercase">Can Replace</span>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="flex items-center justify-between p-3 bg-white/40 border border-slate-100 rounded-[10px] hover:border-slate-200 transition-colors">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center font-bold text-xs text-indigo-600 border border-indigo-100">
+                      RK
+                    </div>
+                    <div>
+                      <h4 class="text-xs font-bold font-geist text-[#070235]">Ramesh Kumar</h4>
+                      <p class="text-[10px] text-slate-500">Tech Operations</p>
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-bold font-geist text-[#009d6c] bg-teal-50 px-2 py-0.5 rounded-full uppercase">Can Replace</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer transition estimate -->
+            <div class="pt-3 border-t border-slate-100/50 flex items-center gap-1.5 text-[11px] text-slate-500 italic">
+              <span class="material-symbols-outlined text-sm text-[#00687a]">info</span>
+              <span>AI Recommended Transition Period: 2 Weeks</span>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- FIXED BOTTOM NAVIGATION BAR (Mobile view < 768px, 80px tall) -->
+  <nav class="fixed bottom-0 left-0 right-0 h-20 z-20 md:hidden glass-nav flex items-center justify-around px-2 pb-safe select-none">
+    
+    <!-- Tab 1: Dashboard -->
+    <button onclick="switchTab('dashboard')" id="mobile-tab-dashboard" class="mobile-tab flex-1 flex flex-col items-center justify-center h-full text-slate-500 py-1 transition-all">
+      <span class="material-symbols-outlined text-2xl">dashboard</span>
+      <span class="text-[10px] font-semibold font-geist mt-1 uppercase tracking-wider">Dashboard</span>
+    </button>
+
+    <!-- Tab 2: Employees -->
+    <button onclick="switchTab('employees')" id="mobile-tab-employees" class="mobile-tab flex-1 flex flex-col items-center justify-center h-full text-slate-500 py-1 transition-all">
+      <span class="material-symbols-outlined text-2xl">groups</span>
+      <span class="text-[10px] font-semibold font-geist mt-1 uppercase tracking-wider">Employees</span>
+    </button>
+
+    <!-- Tab 3: AI Assistant -->
+    <button onclick="switchTab('ai')" id="mobile-tab-ai" class="mobile-tab flex-1 flex flex-col items-center justify-center h-full text-slate-500 py-1 transition-all">
+      <span class="material-symbols-outlined text-2xl">smart_toy</span>
+      <span class="text-[10px] font-semibold font-geist mt-1 uppercase tracking-wider">AI Assistant</span>
+    </button>
+
+    <!-- Tab 4: Skill Matrix -->
+    <button onclick="switchTab('skills')" id="mobile-tab-skills" class="mobile-tab flex-1 flex flex-col items-center justify-center h-full text-slate-500 py-1 transition-all">
+      <span class="material-symbols-outlined text-2xl">hub</span>
+      <span class="text-[10px] font-semibold font-geist mt-1 uppercase tracking-wider">Skills</span>
+    </button>
+
+    <!-- Tab 5: Alerts -->
+    <button onclick="switchTab('alerts')" id="mobile-tab-alerts" class="mobile-tab flex-1 flex flex-col items-center justify-center h-full text-slate-500 py-1 transition-all relative">
+      <span class="relative inline-flex">
+        <span class="material-symbols-outlined text-2xl">notifications</span>
+        <span id="alert-badge-mobile" class="absolute -top-1 -right-1 w-4 h-4 bg-[#ba1a1a] text-white text-[8px] font-geist font-bold rounded-full flex items-center justify-center hidden">3</span>
+      </span>
+      <span class="text-[10px] font-semibold font-geist mt-1 uppercase tracking-wider">Alerts</span>
+    </button>
+
+    <!-- Tab 6: Profile -->
+    <button onclick="switchTab('profile')" id="mobile-tab-profile" class="mobile-tab flex-1 flex flex-col items-center justify-center h-full text-slate-500 py-1 transition-all">
+      <span class="material-symbols-outlined text-2xl">account_circle</span>
+      <span class="text-[10px] font-semibold font-geist mt-1 uppercase tracking-wider">Profile</span>
+    </button>
+  </nav>
+
+  <!-- ============================================ -->
+  <!-- JAVASCRIPT INTERACTIVITY LAYER              -->
+  <!-- ============================================ -->
+  <script>
+    // ================================================
+    // 1. TAB CONFIGURATION & NAVIGATION
+    // ================================================
+    var tabIds = ['dashboard', 'employees', 'ai', 'skills', 'alerts', 'profile'];
+    var currentTab = 'dashboard';
+    var isLoggedIn = false;
+
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function switchTab(targetId) {
+      if (tabIds.indexOf(targetId) === -1 || targetId === currentTab) return;
+
+      if (targetId === 'alerts') clearAlertBadges();
+
+      var previousTab = currentTab;
+      currentTab = targetId;
+
+      var prevScreen = document.getElementById('screen-' + previousTab);
+      var nextScreen = document.getElementById('screen-' + targetId);
+      if (!prevScreen || !nextScreen) return;
+
+      if (!prefersReducedMotion) {
+        prevScreen.classList.remove('opacity-100', 'translate-y-0');
+        prevScreen.classList.add('opacity-0', 'translate-y-4');
+      }
+
+      setTimeout(function() {
+        prevScreen.classList.add('hidden');
+        nextScreen.classList.remove('hidden');
+        if (!prefersReducedMotion) {
+          nextScreen.classList.add('opacity-0', 'translate-y-4');
+          void nextScreen.offsetHeight;
+          nextScreen.classList.remove('opacity-0', 'translate-y-4');
+          nextScreen.classList.add('opacity-100', 'translate-y-0');
+        }
+        nextScreen.scrollTop = 0;
+
+        if (targetId === 'dashboard') animateHealthScoreRing();
+        else if (targetId === 'ai') scrollChatToBottom();
+        else if (targetId === 'skills') animateProgressBars();
+        else if (targetId === 'profile') animateProgressBars();
+        else if (targetId === 'alerts') animateProgressBars();
+      }, prefersReducedMotion ? 0 : 200);
+
+      updateNavigationStates(targetId);
+      try { sessionStorage.setItem('wise-active-tab', targetId); } catch(e) {}
+    }
+
+    function updateNavigationStates(activeId) {
+      tabIds.forEach(function(id) {
+        var sb = document.getElementById('sidebar-' + id);
+        if (sb) {
+          var ind = sb.querySelector('.active-indicator');
+          var ico = sb.querySelector('.material-symbols-outlined');
+          sb.classList.remove('text-[#00687a]', 'bg-slate-50/70');
+          sb.classList.add('text-slate-500');
+          if (ind) ind.classList.add('opacity-0');
+          if (ico) ico.classList.remove('material-fill');
+          if (id === activeId) {
+            sb.classList.remove('text-slate-500');
+            sb.classList.add('text-[#00687a]', 'bg-slate-50/70');
+            if (ind) ind.classList.remove('opacity-0');
+            if (ico) ico.classList.add('material-fill');
+          }
+        }
+        var mb = document.getElementById('mobile-tab-' + id);
+        if (mb) {
+          var ico2 = mb.querySelector('.material-symbols-outlined');
+          var lbl = mb.querySelector('span:not(.material-symbols-outlined)');
+          mb.classList.remove('text-[#00687a]');
+          mb.classList.add('text-slate-500');
+          if (ico2) ico2.classList.remove('material-fill');
+          if (lbl) lbl.classList.remove('font-bold');
+          if (id === activeId) {
+            mb.classList.remove('text-slate-500');
+            mb.classList.add('text-[#00687a]');
+            if (ico2) ico2.classList.add('material-fill');
+            if (lbl) lbl.classList.add('font-bold');
+          }
+        }
+      });
+    }
+
+    // ================================================
+    // 2. LOGIN SYSTEM
+    // ================================================
+    function handleLogin(event) {
+      event.preventDefault();
+      var btn = document.getElementById('login-submit-btn');
+      var btnText = document.getElementById('login-btn-text');
+      var spinner = document.getElementById('login-btn-spinner');
+
+      btnText.classList.add('hidden');
+      spinner.classList.remove('hidden');
+      btn.disabled = true;
+
+      setTimeout(function() {
+        isLoggedIn = true;
+        document.getElementById('screen-login').classList.add('hidden');
+        try { localStorage.setItem('wise-logged-in', 'true'); } catch(e) {}
+
+        var savedTab = 'dashboard';
+        try { var st = sessionStorage.getItem('wise-active-tab'); if (st && tabIds.indexOf(st) !== -1) savedTab = st; } catch(e) {}
+
+        currentTab = 'dashboard';
+        switchTab(savedTab);
+        setTimeout(animateHealthScoreRing, 400);
+        setTimeout(animateProgressBars, 600);
+      }, 1200);
+    }
+
+    function togglePasswordVisibility() {
+      var pw = document.getElementById('login-password');
+      var icon = document.getElementById('password-vis-icon');
+      pw.type = pw.type === 'password' ? 'text' : 'password';
+      icon.textContent = pw.type === 'password' ? 'visibility' : 'visibility_off';
+    }
+
+    // ================================================
+    // 3. NOTIFICATION BADGE SYSTEM
+    // ================================================
+    var unreadAlertCount = 3;
+
+    function updateAlertBadges() {
+      var sb = document.getElementById('alert-badge-sidebar');
+      var mb = document.getElementById('alert-badge-mobile');
+      var show = unreadAlertCount > 0;
+      if (sb) { sb.classList.toggle('hidden', !show); sb.textContent = unreadAlertCount; }
+      if (mb) { mb.classList.toggle('hidden', !show); mb.textContent = unreadAlertCount; }
+    }
+
+    function clearAlertBadges() {
+      unreadAlertCount = 0;
+      updateAlertBadges();
+    }
+
+    function markAllAlertsRead() {
+      clearAlertBadges();
+      document.querySelectorAll('.alert-card').forEach(function(c) { c.style.opacity = '0.6'; });
+      var sub = document.getElementById('alert-header-subtitle');
+      if (sub) sub.textContent = 'All caught up! No new alerts.';
+      var sum = document.getElementById('alert-summary-text');
+      if (sum) sum.textContent = 'No critical alerts at this time';
+    }
+
+    // ================================================
+    // 4. ORG HEALTH SCORE RING ANIMATION (requestAnimationFrame)
+    // ================================================
+    function animateHealthScoreRing() {
+      if (prefersReducedMotion) return;
+      var ring = document.getElementById('health-ring');
+      if (!ring) return;
+
+      var circumference = 439.8;
+      var targetOffset = circumference * (1 - 0.92);
+      var startTime = null;
+
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        var elapsed = timestamp - startTime;
+        var progress = Math.min(elapsed / 800, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        ring.style.strokeDashoffset = circumference - (circumference - targetOffset) * eased;
+
+        var counter = ring.closest('.relative').querySelector('.font-geist.font-extrabold');
+        if (counter) counter.textContent = Math.round(eased * 92) + '%';
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          ring.style.strokeDashoffset = targetOffset;
+          var c2 = ring.closest('.relative').querySelector('.font-geist.font-extrabold');
+          if (c2) c2.textContent = '92%';
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    // ================================================
+    // 5. ALERT CARD DISMISS
+    // ================================================
+    function dismissAlert(closeBtn) {
+      var card = closeBtn.closest('.alert-card');
+      if (!card) return;
+      card.classList.add('alert-dismissing');
+      setTimeout(function() { card.remove(); updateAlertCounts(); }, 200);
+    }
+
+    function updateAlertCounts() {
+      var total = document.querySelectorAll('.alert-card').length;
+      var critical = document.querySelectorAll('.alert-card[data-alert-type="critical"]').length;
+      var risky = document.querySelectorAll('.alert-card[data-alert-type="risky"]').length;
+      var ai = document.querySelectorAll('.alert-card[data-alert-type="ai"]').length;
+
+      var sub = document.getElementById('alert-header-subtitle');
+      if (sub) sub.textContent = total + ' alert' + (total !== 1 ? 's' : '') + ' since your last session';
+      var sum = document.getElementById('alert-summary-text');
+      if (sum) sum.textContent = critical > 0 ? critical + ' critical alert' + (critical !== 1 ? 's' : '') + ' require action today' : 'No critical alerts at this time';
+
+      var allT = document.getElementById('alert-filter-all');
+      if (allT) allT.textContent = 'All (' + total + ')';
+      var critT = document.getElementById('alert-filter-critical');
+      if (critT) critT.textContent = 'Critical (' + critical + ')';
+      var riskT = document.getElementById('alert-filter-risky');
+      if (riskT) riskT.textContent = 'At Risk (' + risky + ')';
+      var aiT = document.getElementById('alert-filter-ai');
+      if (aiT) aiT.textContent = 'AI Flags (' + ai + ')';
+    }
+
+    // ================================================
+    // 6. ALERT FILTERING
+    // ================================================
+    function filterAlertCards(filterType) {
+      document.querySelectorAll('.alert-filter-tab').forEach(function(t) {
+        t.classList.remove('text-[#00687a]', 'border-[#00687a]');
+        t.classList.add('text-slate-500', 'border-transparent');
+      });
+      var active = document.getElementById('alert-filter-' + filterType);
+      if (active) {
+        active.classList.remove('text-slate-500', 'border-transparent');
+        active.classList.add('text-[#00687a]', 'border-[#00687a]');
+      }
+      document.querySelectorAll('.alert-card').forEach(function(card) {
+        if (filterType === 'all') card.classList.remove('hidden');
+        else card.classList.toggle('hidden', card.getAttribute('data-alert-type') !== filterType);
+      });
+    }
+
+    // ================================================
+    // 7. EMPLOYEE SEARCH & FILTER
+    // ================================================
+    var activeDept = 'All';
+
+    function filterDept(deptName) {
+      activeDept = deptName;
+      document.querySelectorAll('.dept-btn').forEach(function(btn) {
+        if (btn.textContent.trim().indexOf(deptName) === 0) {
+          btn.classList.add('bg-[#070235]', 'text-white');
+          btn.classList.remove('bg-white', 'text-slate-600');
+        } else {
+          btn.classList.remove('bg-[#070235]', 'text-white');
+          btn.classList.add('bg-white', 'text-slate-600');
+        }
+      });
+      runEmployeeFilter();
+    }
+
+    function filterEmployees() { runEmployeeFilter(); }
+
+    function runEmployeeFilter() {
+      var query = (document.getElementById('employee-search').value || '').toLowerCase().trim();
+      var cards = document.querySelectorAll('.employee-card');
+      var visible = 0;
+
+      cards.forEach(function(card) {
+        var dept = (card.getAttribute('data-dept') || '').toUpperCase();
+        var name = (card.getAttribute('data-name') || '').toLowerCase();
+        var skills = (card.getAttribute('data-skills') || '').toLowerCase();
+        var role = (card.getAttribute('data-role') || '').toLowerCase();
+
+        var matchDept = activeDept === 'All' || dept === activeDept.toUpperCase();
+        var matchSearch = !query || name.indexOf(query) !== -1 || skills.indexOf(query) !== -1 || role.indexOf(query) !== -1;
+
+        if (matchDept && matchSearch) {
+          card.classList.remove('hidden');
+          card.style.opacity = '1';
+          card.style.pointerEvents = 'auto';
+          visible++;
+        } else {
+          card.style.opacity = '0.3';
+          card.style.pointerEvents = 'none';
+        }
+      });
+
+      var es = document.getElementById('employee-empty-state');
+      if (es) {
+        if (visible === 0 && query) {
+          es.classList.remove('hidden');
+          var p = es.querySelector('p:last-child');
+          if (p) p.textContent = 'No results for "' + query + '" \u2014 try adjusting your search';
+        } else {
+          es.classList.add('hidden');
+        }
+      }
+    }
+
+    // ================================================
+    // 8. PROGRESS BAR ANIMATIONS
+    // ================================================
+    function animateProgressBars() {
+      if (prefersReducedMotion) return;
+      var bars = document.querySelectorAll('.wise-progress');
+      bars.forEach(function(bar, index) {
+        var val = parseFloat(bar.getAttribute('data-value')) || 0;
+        setTimeout(function() { bar.style.width = val + '%'; }, index * 80);
+      });
+    }
+
+    // ================================================
+    // 9. CHART TOOLTIP
+    // ================================================
+    var chartTooltip = null;
+
+    function initChartTooltip() {
+      var svg = document.querySelector('#screen-dashboard svg');
+      if (!svg) return;
+
+      chartTooltip = document.createElement('div');
+      chartTooltip.className = 'chart-tooltip';
+      chartTooltip.style.display = 'none';
+      svg.parentElement.appendChild(chartTooltip);
+
+      var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      var scores = [78, 82, 91.2, 85, 94.1, 88, 76];
+      var circles = svg.querySelectorAll('circle');
+
+      circles.forEach(function(c, i) {
+        c.addEventListener('mouseenter', function() {
+          chartTooltip.innerHTML = 'Day: ' + days[i] + ' | Score: ' + scores[i];
+          chartTooltip.style.display = 'block';
+        });
+        c.addEventListener('mousemove', function(e) {
+          var rect = svg.parentElement.getBoundingClientRect();
+          chartTooltip.style.left = (e.clientX - rect.left + 12) + 'px';
+          chartTooltip.style.top = (e.clientY - rect.top - 30) + 'px';
+        });
+        c.addEventListener('mouseleave', function() { chartTooltip.style.display = 'none'; });
+      });
+    }
+
+    // ================================================
+    // 10. HEATMAP INTERACTIVITY
+    // ================================================
+    function showHeatmapDetails(row) {
+      var dept = row.getAttribute('data-dept') || 'Unknown';
+      var cells = row.querySelectorAll('.heatmap-cell');
+      var html = '';
+
+      cells.forEach(function(cell) {
+        var score = parseInt(cell.getAttribute('data-score')) || 0;
+        var skill = cell.getAttribute('data-skill') || 'Unknown';
+        var level, colorClass;
+        if (score > 80) { level = 'Expert'; colorClass = 'bg-[#1e1b4b]/10 text-[#1e1b4b]'; }
+        else if (score > 60) { level = 'Proficient'; colorClass = 'bg-teal-50 text-[#00687a]'; }
+        else if (score > 0) { level = 'Beginner'; colorClass = 'bg-slate-100 text-slate-500'; }
+        else { level = 'No Data'; colorClass = 'bg-slate-100 text-slate-400'; score = null; }
+
+        html += '<div class="flex items-center justify-between py-1.5">' +
+          '<span class="font-geist font-semibold text-sm text-[#070235]">' + skill + '</span>' +
+          '<span class="flex items-center gap-2">' +
+          '<span class="text-xs ' + (score ? 'text-[#070235]' : 'text-slate-400') + '">' + (score ? score + '%' : 'N/A') + '</span>' +
+          '<span class="text-[9px] font-bold font-geist px-1.5 py-0.5 rounded-full ' + colorClass + '">' + level + '</span></span></div>';
+      });
+
+      document.getElementById('heatmap-detail-title').textContent = dept + ' \u2014 Skill Profile';
+      document.getElementById('heatmap-detail-body').innerHTML = html;
+      document.getElementById('heatmap-detail-sheet').classList.remove('hidden');
+      document.getElementById('heatmap-detail-backdrop').classList.remove('hidden');
+    }
+
+    function closeHeatmapDetails() {
+      document.getElementById('heatmap-detail-sheet').classList.add('hidden');
+      document.getElementById('heatmap-detail-backdrop').classList.add('hidden');
+    }
+
+    function filterHeatmap() {
+      var query = (document.getElementById('heatmap-search').value || '').toLowerCase().trim();
+      document.querySelectorAll('.heatmap-row').forEach(function(row) {
+        var dept = (row.getAttribute('data-dept') || '').toLowerCase();
+        var match = dept.indexOf(query) !== -1;
+        if (!match) {
+          row.querySelectorAll('.heatmap-cell').forEach(function(cell) {
+            var skill = (cell.getAttribute('data-skill') || '').toLowerCase();
+            if (skill.indexOf(query) !== -1) match = true;
+          });
+        }
+        row.style.display = match ? '' : 'none';
+      });
+    }
+
+    // ================================================
+    // 11. DARK MODE TOGGLE
+    // ================================================
+    function toggleTheme() {
+      var html = document.documentElement;
+      var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      try { localStorage.setItem('wise-theme', next); } catch(e) {}
+      var icon = document.getElementById('theme-toggle-icon');
+      if (icon) icon.textContent = next === 'dark' ? 'dark_mode' : 'light_mode';
+    }
+
+    // ================================================
+    // 12. AI ASSISTANT CHAT
+    // ================================================
+    function scrollChatToBottom() {
+      var container = document.getElementById('chat-messages-container');
+      if (container) container.scrollTop = container.scrollHeight;
+    }
+
+    function simulateAIPrompt(text) {
+      switchTab('ai');
+      var input = document.getElementById('chat-input-text');
+      if (input) input.value = text;
+    }
+
+    function handleChatSubmit(event) {
+      event.preventDefault();
+      var input = document.getElementById('chat-input-text');
+      var text = input.value.trim();
+      if (!text) return;
+      appendUserMessage(text);
+      input.value = '';
+      scrollChatToBottom();
+      simulateAITypingAndReply(text);
+    }
+
+    function appendUserMessage(text) {
+      var container = document.getElementById('chat-messages-container');
+      var time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      container.insertAdjacentHTML('beforeend',
+        '<div class="flex justify-end items-start gap-3 ml-12">' +
+        '<div class="flex flex-col items-end space-y-1">' +
+        '<div class="bg-[#070235] text-white px-5 py-3 rounded-2xl rounded-tr-sm text-sm shadow-sm leading-relaxed">' +
+        escapeHtml(text) + '</div>' +
+        '<span class="text-[10px] text-slate-400 font-medium">You \u2022 ' + time + '</span></div>' +
+        '<div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200 flex-shrink-0">' +
+        '<img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120&h=120" alt="User" class="w-full h-full object-cover"></div></div>'
+      );
+    }
+
+    function simulateAITypingAndReply(userQuery) {
+      var container = document.getElementById('chat-messages-container');
+      var time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      var typingId = 'ai-typing-' + Date.now();
+
+      container.insertAdjacentHTML('beforeend',
+        '<div id="' + typingId + '" class="flex justify-start items-start gap-3 mr-12">' +
+        '<div class="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center text-[#00687a] border border-[#00687a]/20 flex-shrink-0">' +
+        '<span class="material-symbols-outlined text-lg material-fill">smart_toy</span></div>' +
+        '<div class="flex flex-col items-start space-y-1">' +
+        '<div class="glass-card text-slate-500 px-5 py-3 rounded-2xl rounded-tl-sm text-sm leading-relaxed flex items-center gap-1.5">' +
+        '<span>Thinking</span>' +
+        '<span class="flex gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#00687a] animate-bounce" style="animation-delay:0.1s"></span>' +
+        '<span class="w-1.5 h-1.5 rounded-full bg-[#00687a] animate-bounce" style="animation-delay:0.2s"></span>' +
+        '<span class="w-1.5 h-1.5 rounded-full bg-[#00687a] animate-bounce" style="animation-delay:0.3s"></span></span></div></div></div>'
+      );
+      scrollChatToBottom();
+
+      setTimeout(function() {
+        var tb = document.getElementById(typingId);
+        if (tb) tb.remove();
+
+        var aiText = '';
+        var extraHtml = '';
+        var q = userQuery.toLowerCase();
+
+        if (q.indexOf('replace') !== -1 || q.indexOf('substitute') !== -1 || q.indexOf('rahul') !== -1 || q.indexOf('ajay') !== -1) {
+          aiText = 'Based on performance metrics, <span class="font-bold text-[#00687a]">Ajay Sharma (98% match)</span> is optimal. Backup: <span class="font-bold text-[#00687a]">Vikas Singh (89%)</span>.';
+          extraHtml = '<div class="glass-card rounded-[14px] p-4 w-full border border-[rgba(229,238,255,0.7)] shadow-sm max-w-lg mt-2">' +
+            '<div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">' +
+            '<h4 class="font-geist font-bold text-xs text-[#00687a]">Match Analysis</h4>' +
+            '<span class="text-[10px] text-slate-500">Auto-generated</span></div>' +
+            '<div class="space-y-2 text-xs font-semibold">' +
+            '<div class="flex justify-between"><span>Ajay Sharma</span><span class="text-[#009d6c]">98%</span></div>' +
+            '<div class="w-full bg-slate-100 h-1.5 rounded-full"><div class="bg-[#00687a] h-full rounded-full" style="width:98%"></div></div>' +
+            '<div class="flex justify-between mt-2"><span>Vikas Singh</span><span class="text-slate-500">89%</span></div>' +
+            '<div class="w-full bg-slate-100 h-1.5 rounded-full"><div class="bg-[#00687a]/60 h-full rounded-full" style="width:89%"></div></div></div></div>';
+        } else if (q.indexOf('burnout') !== -1 || q.indexOf('stress') !== -1 || q.indexOf('risk') !== -1) {
+          aiText = '<span class="font-bold text-[#ba1a1a]">4 employees flagged</span> for high workload. Recommend redistribution.';
+        } else if (q.indexOf('skill') !== -1 || q.indexOf('gap') !== -1 || q.indexOf('heatmap') !== -1 || q.indexOf('mobility') !== -1) {
+          aiText = 'Detected <span class="font-bold text-[#00687a]">8% skill gap</span> in Cloud Engineering. Recommend Cloud Systems training.';
+        } else {
+          aiText = 'Logged: "' + escapeHtml(userQuery) + '". Analyzing workforce data...';
+        }
+
+        container.insertAdjacentHTML('beforeend',
+          '<div class="flex justify-start items-start gap-3 mr-12">' +
+          '<div class="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center text-[#00687a] border border-[#00687a]/20 flex-shrink-0">' +
+          '<span class="material-symbols-outlined text-lg material-fill">smart_toy</span></div>' +
+          '<div class="flex flex-col items-start space-y-2">' +
+          '<div class="glass-card text-[#0b1c30] px-5 py-3 rounded-2xl rounded-tl-sm text-sm leading-relaxed max-w-lg">' + aiText + '</div>' +
+          extraHtml +
+          '<span class="text-[10px] text-slate-400 font-medium">WISE Intelligence \u2022 ' + time + '</span></div></div>'
+        );
+        scrollChatToBottom();
+      }, 1200);
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+    }
+
+    // ================================================
+    // 13. MICRO-INTERACTIONS
+    // ================================================
+    function initMicroInteractions() {
+      document.querySelectorAll('.glass-card').forEach(function(card) {
+        if (card.closest('#screen-login')) return;
+        card.addEventListener('mouseenter', function() {
+          if (!prefersReducedMotion) this.style.transform = 'translateY(-2px)';
+        });
+        card.addEventListener('mouseleave', function() { this.style.transform = 'translateY(0)'; });
+      });
+
+      document.querySelectorAll('button').forEach(function(btn) {
+        btn.addEventListener('mousedown', function() {
+          if (!prefersReducedMotion && !this.closest('.mobile-tab')) this.style.transform = 'scale(0.97)';
+        });
+        btn.addEventListener('mouseup', function() { this.style.transform = 'scale(1)'; });
+        btn.addEventListener('mouseleave', function() { this.style.transform = 'scale(1)'; });
+      });
+
+      document.querySelectorAll('.mobile-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          if (prefersReducedMotion) return;
+          this.classList.remove('tap-bounce');
+          void this.offsetWidth;
+          this.classList.add('tap-bounce');
+        });
+      });
+    }
+
+    // ================================================
+    // 14. DOMCONTENTLOADED INIT
+    // ================================================
+    window.addEventListener('DOMContentLoaded', function() {
+      try {
+        if (localStorage.getItem('wise-logged-in') === 'true') {
+          isLoggedIn = true;
+          document.getElementById('screen-login').classList.add('hidden');
+        }
+      } catch(e) {}
+
+      var savedTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var icon = document.getElementById('theme-toggle-icon');
+      if (icon) icon.textContent = savedTheme === 'dark' ? 'dark_mode' : 'light_mode';
+
+      var savedTab = 'dashboard';
+      try { var st = sessionStorage.getItem('wise-active-tab'); if (st && tabIds.indexOf(st) !== -1) savedTab = st; } catch(e) {}
+
+      if (isLoggedIn) {
+        currentTab = savedTab;
+        tabIds.forEach(function(id) {
+          var el = document.getElementById('screen-' + id);
+          if (el) {
+            if (id === savedTab) {
+              el.classList.remove('hidden');
+              el.classList.add('opacity-100', 'translate-y-0');
+            } else {
+              el.classList.add('hidden');
+              el.classList.remove('opacity-100', 'translate-y-0');
+            }
+          }
+        });
+        updateNavigationStates(savedTab);
+        setTimeout(animateHealthScoreRing, 400);
+        setTimeout(animateProgressBars, 600);
+      } else {
+        tabIds.forEach(function(id) {
+          var el = document.getElementById('screen-' + id);
+          if (el) el.classList.add('hidden');
+        });
+      }
+
+      updateAlertBadges();
+      setTimeout(initChartTooltip, 500);
+      initMicroInteractions();
+    });
+  </script>
+
+</body>
+</html>

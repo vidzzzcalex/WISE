@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #070235;
+  --color-secondary: #00687a;
+  --color-success: #009d6c;
+  --color-error: #ba1a1a;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fef3c7;
+
+  --font-geist: "Geist", sans-serif;
+  --font-inter: "Inter", sans-serif;
+
+  --radius-card: 14px;
+  --radius-btn: 8px;
+
+  --spacing-stack-xs: 4px;
+  --spacing-stack-sm: 8px;
+  --spacing-stack-md: 16px;
+  --spacing-stack-lg: 24px;
+  --spacing-stack-xl: 48px;
+}
