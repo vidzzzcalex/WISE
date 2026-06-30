@@ -17,9 +17,9 @@
     })();
   </script>
   
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  
+  <!-- Tailwind CSS (built locally) -->
+  <link href="/dist/styles.css" rel="stylesheet">
+
   <!-- Google Fonts: Geist (for headings & labels) & Inter (for body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,52 +27,6 @@
   
   <!-- Material Symbols Outlined -->
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-
-  <!-- Tailwind Configuration -->
-  <script id="tailwind-config">
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            // Hex specifications from user design system rules
-            primary: '#070235', // Deep Navy
-            secondary: '#00687a', // Teal/cyan
-            success: '#009d6c', // Success
-            error: '#ba1a1a', // Error
-            warning: '#f59e0b', // amber-500 equivalent for warning
-            'warning-light': '#fef3c7',
-            slate: {
-              50: '#f8fafc',
-              100: '#f1f5f9',
-              200: '#e2e8f0',
-              300: '#cbd5e1',
-              400: '#94a3b8',
-              500: '#64748b',
-              600: '#475569',
-              700: '#334155',
-              800: '#1e293b',
-              900: '#0f172a'
-            }
-          },
-          borderRadius: {
-            'card': '14px',
-            'btn': '8px',
-          },
-          spacing: {
-            'stack-xs': '4px',
-            'stack-sm': '8px',
-            'stack-md': '16px',
-            'stack-lg': '24px',
-            'stack-xl': '48px',
-          },
-          fontFamily: {
-            geist: ['Geist', 'sans-serif'],
-            inter: ['Inter', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
 
   <!-- Custom CSS for Glassmorphism, Animations & Theme System -->
   <style>
